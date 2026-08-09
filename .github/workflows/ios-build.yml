@@ -54,17 +54,15 @@ jobs:
           BUILD_FLAVOR: ${{ inputs.flavor || 'debug' }}
         run: |
           if [[ "$BUILD_FLAVOR" == "release" ]]; then
-            flutter build ipa --release --no-pub
+            flutter build ios --release --no-pub --no-codesign --simulator
           else
-            flutter build ipa --debug --no-pub
+            flutter build ios --debug --no-pub --no-codesign --simulator
           fi
 
       - name: 上传构建产物
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: ios-build-${{ inputs.flavor || 'debug' }}-${{ github.run_number }}
-          path: |
-            build/ios/iphonesimulator/Runner.app
-            build/ios/iphoneos/Runner.ipa
+          path: build/ios/iphonesimulator/Runner.app
           if-no-files-found: warn
           retention-days: 3
