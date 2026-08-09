@@ -1,0 +1,70 @@
+name: iOS Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: '构建变体'
+        required: false
+        default: 'debug'
+        type: choice
+        options:
+          - debug
+          - release
+  push:
+    branches: [main]
+    paths: ['lib/**', 'pubspec.yaml', 'ios/**', '.github/workflows/ios-build.yml']
+  pull_request:
+    branches: [main]
+    paths: ['lib/**', 'pubspec.yaml', 'ios/**', '.github/workflows/ios-build.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-ios:
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+
+      - name: 安装 Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: '3.44.8'
+          channel: stable
+          cache: true
+          cache-key: flutter-3.44.8-macos-15-x86_64
+
+      - name: 拉取依赖
+        run: flutter pub get --enforce-lockfile
+
+      - name: 静态检查
+        run: flutter analyze --no-pub
+
+      - name: 构建 iOS
+        env:
+          BUILD_FLAVOR: ${{ inputs.flavor || 'debug' }}
+        run: |
+          if [[ "$BUILD_FLAVOR" == "release" ]]; then
+            flutter build ipa --release --no-pub
+          else
+            flutter build ipa --debug --no-pub
+          fi
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: ios-build-${{ inputs.flavor || 'debug' }}-${{ github.run_number }}
+          path: |
+            build/ios/iphonesimulator/Runner.app
+            build/ios/iphoneos/Runner.ipa
+          if-no-files-found: warn
+          retention-days: 3
