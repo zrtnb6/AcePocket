@@ -34,7 +34,8 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
   static const _kDefaultSubType = 'website';
 
   /// 新建脚本任务时预填的模板。
-  static const _scriptTemplate = '#!/bin/bash\n'
+  static const _scriptTemplate =
+      '#!/bin/bash\n'
       'export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:'
       '/usr/local/sbin:\$PATH\n\n'
       '# 在此填写脚本内容\n';
@@ -144,8 +145,7 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
     try {
       final repo = ref.read(cronRepoProvider);
       final cron = await repo.get(widget.id!);
-      final needScript =
-          cron.type == CronTypes.shell && cron.shell.isNotEmpty;
+      final needScript = cron.type == CronTypes.shell && cron.shell.isNotEmpty;
       String script = '';
       Object? scriptError;
       if (needScript) {
@@ -230,20 +230,16 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
     final blocked = _scriptReadFailed;
     return UnsavedChangesGuard(
       hasUnsavedChanges: _dirty && !_saving,
-      message: _isEdit
-          ? '任务的修改还没有保存，确定放弃吗？'
-          : '新建的任务还没有创建，确定放弃吗？',
+      message: _isEdit ? '任务的修改还没有保存，确定放弃吗？' : '新建的任务还没有创建，确定放弃吗？',
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(_isEdit ? '编辑计划任务' : '新建计划任务'),
-        ),
+        appBar: AppBar(title: Text(_isEdit ? '编辑计划任务' : '新建计划任务')),
         body: server == null
             ? const NoServerView()
             : _loading
-                ? const LoadingView(message: '正在加载任务详情…')
-                : _loadError != null
-                    ? ErrorView(error: _loadError!, onRetry: _load)
-                    : _buildForm(context),
+            ? const LoadingView(message: '正在加载任务详情…')
+            : _loadError != null
+            ? ErrorView(error: _loadError!, onRetry: _load)
+            : _buildForm(context),
         bottomNavigationBar: server == null || _loading || _loadError != null
             ? null
             : SafeArea(
@@ -259,9 +255,7 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
                           '脚本内容未能读取，保存会覆盖服务器上的现有脚本，'
                           '请先在上方重试读取。',
                           textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
+                          style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.error,
                               ),
@@ -386,10 +380,7 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
                   minLines: 8,
                   autocorrect: false,
                   enableSuggestions: false,
-                  style: const TextStyle(
-                    fontFamily: 'monospace',
-                    fontSize: 13,
-                  ),
+                  style: const TextStyle(fontFamily: 'monospace', fontSize: 13),
                   decoration: const InputDecoration(
                     alignLabelWithHint: true,
                     hintText: '#!/bin/bash',
@@ -427,8 +418,11 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.error_outline,
-                  size: 20, color: colorScheme.onErrorContainer),
+              Icon(
+                Icons.error_outline,
+                size: 20,
+                color: colorScheme.onErrorContainer,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -534,6 +528,7 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
           KvEditor(
             label: '自定义请求头',
             entries: _headers,
+            keyHint: '名称',
             onChanged: (v) => _updateField(() => _headers = v),
           ),
           if (_method == 'POST' || _method == 'PUT' || _method == 'PATCH') ...[
@@ -587,8 +582,9 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
 
   Widget _buildBackupSection(ThemeData theme) {
     final isBackup = _type == CronTypes.backup;
-    final subTypes =
-        isBackup ? CronTypes.backupSubTypes : CronTypes.cutoffSubTypes;
+    final subTypes = isBackup
+        ? CronTypes.backupSubTypes
+        : CronTypes.cutoffSubTypes;
     return SectionCard(
       title: isBackup ? '备份配置' : '日志切割配置',
       child: Column(
@@ -597,9 +593,7 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
           DropdownButtonFormField<String>(
             initialValue: subTypes.containsKey(_subType) ? _subType : null,
             isExpanded: true,
-            decoration: InputDecoration(
-              labelText: isBackup ? '备份类型' : '切割类型',
-            ),
+            decoration: InputDecoration(labelText: isBackup ? '备份类型' : '切割类型'),
             items: [
               for (final entry in subTypes.entries)
                 DropdownMenuItem(
@@ -618,8 +612,9 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
               });
               _autoName();
             },
-            validator: (v) =>
-                (v == null || v.isEmpty) ? '请选择${isBackup ? '备份' : '切割'}类型' : null,
+            validator: (v) => (v == null || v.isEmpty)
+                ? '请选择${isBackup ? '备份' : '切割'}类型'
+                : null,
           ),
           const SizedBox(height: 16),
           _buildTargetField(theme),
@@ -683,7 +678,8 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
       );
     }
 
-    if (isBackup && CronTypes.backupSubTypes.containsKey(_subType) &&
+    if (isBackup &&
+        CronTypes.backupSubTypes.containsKey(_subType) &&
         _subType != 'website') {
       // mysql / postgresql / clickhouse
       final provider = databaseOptionsProvider(_subType);
@@ -732,8 +728,9 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
       ),
       data: (list) {
         final ids = list.map((e) => e.id).toList();
-        final value =
-            ids.contains(_storage) ? _storage : (ids.isEmpty ? null : ids.first);
+        final value = ids.contains(_storage)
+            ? _storage
+            : (ids.isEmpty ? null : ids.first);
         // 原先选中的存储已被删除时，下拉框回退到第一项，但 _storage 仍是失效的
         // ID，提交出去会落到一个不存在的存储上——这里把状态一并纠正过来。
         if (value != null && value != _storage) {
@@ -810,10 +807,11 @@ class _CronEditPageState extends ConsumerState<CronEditPage> {
     final form = _formKey.currentState;
     if (form == null || !form.validate()) return;
 
-    final needTargets =
-        _type == CronTypes.backup || _type == CronTypes.cutoff;
-    final targets =
-        _targets.map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+    final needTargets = _type == CronTypes.backup || _type == CronTypes.cutoff;
+    final targets = _targets
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
     if (needTargets && targets.isEmpty) {
       showErrorSnack(context, '请至少选择一个目标');
       return;

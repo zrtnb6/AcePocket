@@ -10,6 +10,7 @@ import '../../terminal/models/terminal_settings.dart';
 import '../../terminal/providers/terminal_providers.dart';
 import '../models/app_settings.dart';
 import '../providers/app_settings_providers.dart';
+import '../widgets/backup_section.dart';
 import '../widgets/pinned_cert_section.dart';
 
 /// 应用设置页：App 本地偏好（外观 / 启动行为 / 数据刷新 / 终端 / 网络与安全 /
@@ -33,6 +34,7 @@ class AppSettingsPage extends ConsumerWidget {
           _TerminalSection(),
           // 自带「网络与安全」SectionCard 外壳，直接放置即可。
           PinnedCertSection(),
+          BackupSection(),
           _UsageSection(),
           _AboutEntrySection(),
         ],
@@ -170,7 +172,9 @@ class _DataRefreshSection extends ConsumerWidget {
                   .toList(),
             ),
           ),
-          const _SectionNote('首页实时数据（CPU / 内存 / 网络等）的轮询间隔。间隔越短数据越实时，但更耗电、更费流量。'),
+          const _SectionNote(
+            '首页实时数据（CPU / 内存 / 网络等）的轮询间隔。间隔越短数据越实时，但更耗电、更费流量。',
+          ),
         ],
       ),
     );
@@ -224,7 +228,8 @@ class _TerminalSection extends ConsumerWidget {
                   min: TerminalSettings.minFontSize,
                   max: TerminalSettings.maxFontSize,
                   divisions:
-                      (TerminalSettings.maxFontSize - TerminalSettings.minFontSize)
+                      (TerminalSettings.maxFontSize -
+                              TerminalSettings.minFontSize)
                           .round(),
                   label: settings.fontSize.toStringAsFixed(0),
                   onChanged: notifier.setFontSize,
@@ -336,9 +341,9 @@ class _UsageSection extends ConsumerWidget {
     if (confirmed != true) return;
     await ref.read(moreUsageProvider.notifier).clearAll();
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('已清除使用记录')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('已清除使用记录')));
   }
 
   @override

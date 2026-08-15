@@ -24,8 +24,11 @@ enum MonitorRange {
   /// 今天 = 今日 0 点至今；昨天 = 昨日 0 点到今日 0 点；近 N 天 = N 天前 0 点至今）。
   ({int start, int end}) resolve() {
     final now = DateTime.now();
-    final todayStart =
-        DateTime(now.year, now.month, now.day).millisecondsSinceEpoch;
+    final todayStart = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).millisecondsSinceEpoch;
     const dayMs = 24 * 60 * 60 * 1000;
     switch (this) {
       case MonitorRange.today:
@@ -33,14 +36,11 @@ enum MonitorRange {
       case MonitorRange.yesterday:
         return (start: todayStart - dayMs, end: todayStart);
       case MonitorRange.last7d:
-        return (
-          start: todayStart - 7 * dayMs,
-          end: now.millisecondsSinceEpoch
-        );
+        return (start: todayStart - 7 * dayMs, end: now.millisecondsSinceEpoch);
       case MonitorRange.last30d:
         return (
           start: todayStart - 30 * dayMs,
-          end: now.millisecondsSinceEpoch
+          end: now.millisecondsSinceEpoch,
         );
     }
   }
@@ -51,12 +51,12 @@ enum MonitorRange {
 }
 
 /// 当前选中的时间范围。
-final monitorRangeProvider =
-    StateProvider.autoDispose<MonitorRange>((ref) => MonitorRange.today);
+final monitorRangeProvider = StateProvider.autoDispose<MonitorRange>(
+  (ref) => MonitorRange.today,
+);
 
 /// 历史监控数据（随时间范围变化自动重新加载）。
-final monitorDetailProvider =
-    FutureProvider.autoDispose<MonitorDetail>((ref) {
+final monitorDetailProvider = FutureProvider.autoDispose<MonitorDetail>((ref) {
   final range = ref.watch(monitorRangeProvider).resolve();
   return ref
       .watch(monitorRepoProvider)
@@ -64,15 +64,18 @@ final monitorDetailProvider =
 });
 
 /// 监控设置。
-final monitorSettingProvider =
-    FutureProvider.autoDispose<MonitorSetting>((ref) {
+final monitorSettingProvider = FutureProvider.autoDispose<MonitorSetting>((
+  ref,
+) {
   return ref.watch(monitorRepoProvider).setting();
 });
 
 /// 网络图表当前选中的网卡名（null = 数据中的第一块网卡）。
-final monitorNetDeviceProvider =
-    StateProvider.autoDispose<String?>((ref) => null);
+final monitorNetDeviceProvider = StateProvider.autoDispose<String?>(
+  (ref) => null,
+);
 
 /// 磁盘 IO 图表当前选中的磁盘名（null = 数据中的第一块磁盘）。
-final monitorDiskDeviceProvider =
-    StateProvider.autoDispose<String?>((ref) => null);
+final monitorDiskDeviceProvider = StateProvider.autoDispose<String?>(
+  (ref) => null,
+);

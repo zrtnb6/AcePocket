@@ -7,8 +7,11 @@ import '../../../core/api/api_exception.dart';
 import '../../../core/widgets/app_snack.dart';
 
 /// 复制文本到剪贴板并提示。
-Future<void> copyToClipboard(BuildContext context, String text,
-    {String label = '已复制'}) async {
+Future<void> copyToClipboard(
+  BuildContext context,
+  String text, {
+  String label = '已复制',
+}) async {
   await Clipboard.setData(ClipboardData(text: text));
   if (!context.mounted) return;
   showSuccessSnack(context, label);
@@ -68,23 +71,26 @@ String phpVersionText(int version) {
 /// 面板把 php-fpm status 的原始值原样 `cast.ToString`，
 /// 启动时间是 Unix 秒时间戳，直接展示为数字对用户无意义。
 String formatLoadValue(String name, String value) {
-  final isTimeField = name.contains('时间') || name.toLowerCase().contains('time');
+  final isTimeField =
+      name.contains('时间') || name.toLowerCase().contains('time');
   if (!isTimeField) return value;
   final seconds = int.tryParse(value.trim());
   if (seconds == null || seconds < 1000000000 || seconds > 99999999999) {
     return value;
   }
-  final time =
-      DateTime.fromMillisecondsSinceEpoch(seconds * 1000, isUtc: true).toLocal();
+  final time = DateTime.fromMillisecondsSinceEpoch(
+    seconds * 1000,
+    isUtc: true,
+  ).toLocal();
   return DateFormat('yyyy-MM-dd HH:mm:ss').format(time);
 }
 
 /// `GET /environment/is_installed` 的探测结果文案。
 String probeText(AsyncValue<bool> probe) => probe.when(
-      loading: () => '检测中…',
-      error: (error, _) => '检测失败（${describeError(error)}）',
-      data: (value) => value ? '已安装' : '未安装',
-    );
+  loading: () => '检测中…',
+  error: (error, _) => '检测失败（${describeError(error)}）',
+  data: (value) => value ? '已安装' : '未安装',
+);
 
 /// 键值展示行（左标题、右值，值可换行）。
 class KeyValueRow extends StatelessWidget {
@@ -122,7 +128,8 @@ class KeyValueRow extends StatelessWidget {
           Expanded(
             child: Text(
               value.isEmpty ? '—' : value,
-              style: valueStyle ??
+              style:
+                  valueStyle ??
                   theme.textTheme.bodyMedium?.copyWith(
                     fontFamily: monospace ? 'monospace' : null,
                   ),

@@ -76,27 +76,31 @@ class CertTile extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final status = certStatusOf(cert);
 
-    final (Color statusColor, Color statusBg, String statusText) = switch (status) {
+    final (
+      Color statusColor,
+      Color statusBg,
+      String statusText,
+    ) = switch (status) {
       CertStatus.pending => (
-          colorScheme.onSurfaceVariant,
-          colorScheme.surfaceContainerHighest,
-          '未签发'
-        ),
+        colorScheme.onSurfaceVariant,
+        colorScheme.surfaceContainerHighest,
+        '未签发',
+      ),
       CertStatus.valid => (
-          colorScheme.primary,
-          colorScheme.primaryContainer,
-          '有效'
-        ),
+        colorScheme.primary,
+        colorScheme.primaryContainer,
+        '有效',
+      ),
       CertStatus.expiring => (
-          colorScheme.tertiary,
-          colorScheme.tertiaryContainer,
-          '即将到期'
-        ),
+        colorScheme.tertiary,
+        colorScheme.tertiaryContainer,
+        '即将到期',
+      ),
       CertStatus.expired => (
-          colorScheme.error,
-          colorScheme.errorContainer,
-          '已过期'
-        ),
+        colorScheme.error,
+        colorScheme.errorContainer,
+        '已过期',
+      ),
     };
 
     final canObtain = !cert.isUpload && cert.cert.isEmpty && cert.key.isEmpty;
@@ -151,10 +155,7 @@ class CertTile extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 10),
-            _InfoRow(
-              label: '类型',
-              value: CertListItem.typeLabel(cert.type),
-            ),
+            _InfoRow(label: '类型', value: CertListItem.typeLabel(cert.type)),
             if (cert.issuer.isNotEmpty)
               _InfoRow(label: '颁发者', value: cert.issuer),
             _InfoRow(
@@ -163,13 +164,13 @@ class CertTile extends StatelessWidget {
               valueColor: status == CertStatus.expired
                   ? colorScheme.error
                   : status == CertStatus.expiring
-                      ? colorScheme.tertiary
-                      : null,
+                  ? colorScheme.tertiary
+                  : null,
               suffix: cert.daysLeft == null
                   ? null
                   : cert.daysLeft! < 0
-                      ? '（已过期 ${-cert.daysLeft!} 天）'
-                      : '（剩余 ${cert.daysLeft} 天）',
+                  ? '（已过期 ${-cert.daysLeft!} 天）'
+                  : '（剩余 ${cert.daysLeft} 天）',
             ),
             if (cert.nextRenewal != null)
               _InfoRow(label: '下次续签', value: _fmtDate(cert.nextRenewal)),
@@ -192,7 +193,8 @@ class CertTile extends StatelessWidget {
                   // 读屏只念「开关」无法分辨是哪张证书，补上控制对象；
                   // 开 / 关状态由 Switch 自身播报，label 里不写状态词。
                   a11ySwitch(
-                    label: '证书 ${cert.domains.isEmpty ? '（无域名）' : cert.domains.first} 的自动续签',
+                    label:
+                        '证书 ${cert.domains.isEmpty ? '（无域名）' : cert.domains.first} 的自动续签',
                     child: Switch(
                       value: cert.autoRenewal,
                       onChanged: busy ? null : (_) => onToggleAutoRenewal(),
@@ -274,10 +276,9 @@ class _Chip extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: Theme.of(context)
-            .textTheme
-            .labelSmall
-            ?.copyWith(color: foreground),
+        style: Theme.of(
+          context,
+        ).textTheme.labelSmall?.copyWith(color: foreground),
       ),
     );
   }
@@ -301,8 +302,9 @@ class _InfoRow extends StatelessWidget {
     final theme = Theme.of(context);
     // 标签列宽随系统字号放大，否则 200% 字号下「到期时间」会被挤成多行；
     // 上限 140 是为了给右侧值留出足够宽度。
-    final labelWidth =
-        MediaQuery.textScalerOf(context).scale(76).clamp(76.0, 140.0);
+    final labelWidth = MediaQuery.textScalerOf(
+      context,
+    ).scale(76).clamp(76.0, 140.0);
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(

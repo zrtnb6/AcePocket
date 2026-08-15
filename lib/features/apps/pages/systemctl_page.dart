@@ -30,8 +30,8 @@ class _SystemctlPageState extends ConsumerState<SystemctlPage> {
     if (_refreshing) return;
     setState(() => _refreshing = true);
     // 重新推导服务列表，并让每个服务重新查询状态。
-    for (final service in ref.read(serviceListProvider).valueOrNull ??
-        const <ServiceRef>[]) {
+    for (final service
+        in ref.read(serviceListProvider).valueOrNull ?? const <ServiceRef>[]) {
       ref.invalidate(serviceStateProvider(service.name));
     }
     ref.invalidate(serviceListProvider);
@@ -47,10 +47,10 @@ class _SystemctlPageState extends ConsumerState<SystemctlPage> {
   }
 
   Future<void> _addService() async {
-    final existing = (ref.read(serviceListProvider).valueOrNull ??
-            const <ServiceRef>[])
-        .map((s) => s.name)
-        .toList();
+    final existing =
+        (ref.read(serviceListProvider).valueOrNull ?? const <ServiceRef>[])
+            .map((s) => s.name)
+            .toList();
     final name = await showAddServiceDialog(context, existing: existing);
     if (name == null || name.isEmpty) return;
     try {
@@ -112,7 +112,8 @@ class _SystemctlPageState extends ConsumerState<SystemctlPage> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.6,
                     child: EmptyView(
-                      message: '暂无可管理的服务\n'
+                      message:
+                          '暂无可管理的服务\n'
                           '安装应用后会自动出现，也可手动添加服务名',
                       icon: Icons.settings_suggest_outlined,
                       action: FilledButton.icon(

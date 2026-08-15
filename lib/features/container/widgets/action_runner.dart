@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/widgets/app_snack.dart';
@@ -17,11 +19,13 @@ Future<bool> runAction(
 }) async {
   final navigator = Navigator.of(context, rootNavigator: true);
 
-  showDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    useRootNavigator: true,
-    builder: (_) => _ProgressDialog(message: pending),
+  unawaited(
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      useRootNavigator: true,
+      builder: (_) => _ProgressDialog(message: pending),
+    ),
   );
 
   Object? failure;

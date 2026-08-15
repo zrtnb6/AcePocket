@@ -18,7 +18,7 @@ class CronRepo {
   /// 计划任务列表（分页）。
   Future<PageResult<Cron>> list({required int page, required int limit}) async {
     final data = await _api.get('/cron', query: {'page': page, 'limit': limit});
-    return PageResult.fromJson(data, Cron.fromJson);
+    return Paged.fromJson(data, Cron.fromJson);
   }
 
   /// 获取单个计划任务详情（含 shell / log 路径与 config）。
@@ -49,25 +49,27 @@ class CronRepo {
     int timeout = 10,
     bool insecure = false,
     int retries = 0,
-  }) =>
-      _api.post('/cron', body: {
-        'name': name,
-        'type': type,
-        'time': time,
-        'script': script,
-        'sub_type': subType,
-        'flock': flock,
-        'storage': storage,
-        'targets': targets,
-        'keep': keep,
-        'url': url,
-        'method': method,
-        'headers': headers,
-        'body': body,
-        'timeout': timeout,
-        'insecure': insecure,
-        'retries': retries,
-      });
+  }) => _api.post(
+    '/cron',
+    body: {
+      'name': name,
+      'type': type,
+      'time': time,
+      'script': script,
+      'sub_type': subType,
+      'flock': flock,
+      'storage': storage,
+      'targets': targets,
+      'keep': keep,
+      'url': url,
+      'method': method,
+      'headers': headers,
+      'body': body,
+      'timeout': timeout,
+      'insecure': insecure,
+      'retries': retries,
+    },
+  );
 
   /// 更新计划任务。
   ///
@@ -91,26 +93,28 @@ class CronRepo {
     int timeout = 10,
     bool insecure = false,
     int retries = 0,
-  }) =>
-      _api.put('/cron/$id', body: {
-        'id': id,
-        'name': name,
-        'type': type,
-        'time': time,
-        'script': script,
-        'sub_type': subType,
-        'flock': flock,
-        'storage': storage,
-        'targets': targets,
-        'keep': keep,
-        'url': url,
-        'method': method,
-        'headers': headers,
-        'body': body,
-        'timeout': timeout,
-        'insecure': insecure,
-        'retries': retries,
-      });
+  }) => _api.put(
+    '/cron/$id',
+    body: {
+      'id': id,
+      'name': name,
+      'type': type,
+      'time': time,
+      'script': script,
+      'sub_type': subType,
+      'flock': flock,
+      'storage': storage,
+      'targets': targets,
+      'keep': keep,
+      'url': url,
+      'method': method,
+      'headers': headers,
+      'body': body,
+      'timeout': timeout,
+      'insecure': insecure,
+      'retries': retries,
+    },
+  );
 
   /// 删除计划任务。
   Future<void> delete(int id) => _api.delete('/cron/$id');
@@ -152,11 +156,10 @@ class CronRepo {
     int offset = 0,
     int limit = 300,
   }) async {
-    final data = await _api.get('/file/tail', query: {
-      'path': path,
-      'offset': offset,
-      'limit': limit,
-    });
+    final data = await _api.get(
+      '/file/tail',
+      query: {'path': path, 'offset': offset, 'limit': limit},
+    );
     return LogTail.fromJson(data);
   }
 

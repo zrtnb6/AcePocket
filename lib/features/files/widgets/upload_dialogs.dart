@@ -103,8 +103,7 @@ class _TextUploadDialogState extends State<_TextUploadDialog> {
       setState(() => _error = error);
       return;
     }
-    Navigator.of(context)
-        .pop((name: name, content: _contentController.text));
+    Navigator.of(context).pop((name: name, content: _contentController.text));
   }
 
   @override
@@ -130,10 +129,7 @@ class _TextUploadDialogState extends State<_TextUploadDialog> {
             TextField(
               controller: _nameController,
               autofocus: true,
-              decoration: InputDecoration(
-                labelText: '文件名',
-                errorText: _error,
-              ),
+              decoration: InputDecoration(labelText: '文件名', errorText: _error),
               onChanged: (_) {
                 if (_error != null) setState(() => _error = null);
               },

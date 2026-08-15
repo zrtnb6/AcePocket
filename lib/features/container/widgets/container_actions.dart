@@ -23,7 +23,8 @@ enum ContainerAction {
   final IconData icon;
 
   /// 是否为危险操作（菜单项用错误色渲染）。
-  bool get danger => this == ContainerAction.remove || this == ContainerAction.kill;
+  bool get danger =>
+      this == ContainerAction.remove || this == ContainerAction.kill;
 }
 
 /// 根据容器状态给出可用的操作列表。
@@ -135,7 +136,8 @@ Future<bool> performContainerAction(
       final ok = await showConfirmDialog(
         context,
         title: '强制终止容器',
-        content: '确定要强制终止「$display」吗？\n将直接向容器主进程发送 SIGKILL，'
+        content:
+            '确定要强制终止「$display」吗？\n将直接向容器主进程发送 SIGKILL，'
             '未保存的数据可能丢失。',
         confirmText: '强制终止',
         danger: true,

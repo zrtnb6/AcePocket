@@ -27,8 +27,7 @@ class NotifyChannelFormPage extends ConsumerStatefulWidget {
       _NotifyChannelFormPageState();
 }
 
-class _NotifyChannelFormPageState
-    extends ConsumerState<NotifyChannelFormPage> {
+class _NotifyChannelFormPageState extends ConsumerState<NotifyChannelFormPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _hostController = TextEditingController();
@@ -73,30 +72,32 @@ class _NotifyChannelFormPageState
       controller.addListener(_onFieldChanged);
     }
     if (!_isEdit) {
-      _apply(const NotifyChannel(
-        id: 0,
-        name: '',
-        type: kNotifyTypeSmtp,
-        config: <String, dynamic>{},
-        enabled: true,
-      ));
+      _apply(
+        const NotifyChannel(
+          id: 0,
+          name: '',
+          type: kNotifyTypeSmtp,
+          config: <String, dynamic>{},
+          enabled: true,
+        ),
+      );
     }
   }
 
   /// 当前表单值的快照，用于判断是否有未保存的修改。
   String _snapshot() => <String>[
-        _nameController.text.trim(),
-        _hostController.text.trim(),
-        _portController.text.trim(),
-        _usernameController.text.trim(),
-        _passwordController.text,
-        _fromController.text.trim(),
-        _fromNameController.text.trim(),
-        _encryption,
-        '$_skipVerify',
-        '$_enabled',
-        _recipients.map((e) => e.trim()).where((e) => e.isNotEmpty).join(','),
-      ].join('\u0000');
+    _nameController.text.trim(),
+    _hostController.text.trim(),
+    _portController.text.trim(),
+    _usernameController.text.trim(),
+    _passwordController.text,
+    _fromController.text.trim(),
+    _fromNameController.text.trim(),
+    _encryption,
+    '$_skipVerify',
+    '$_enabled',
+    _recipients.map((e) => e.trim()).where((e) => e.isNotEmpty).join(','),
+  ].join('\u0000');
 
   void _onFieldChanged() {
     if (_applying) return;
@@ -149,8 +150,10 @@ class _NotifyChannelFormPageState
     if (_saving) return;
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
-    final recipients =
-        _recipients.map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+    final recipients = _recipients
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
     if (recipients.isEmpty) {
       showErrorSnack(context, '请至少填写一个收件人');
       return;
@@ -232,11 +235,7 @@ class _NotifyChannelFormPageState
           key: _formKey,
           child: ListView(
             padding: const EdgeInsets.only(bottom: 96),
-            children: [
-              _basicCard(),
-              _serverCard(),
-              _senderCard(),
-            ],
+            children: [_basicCard(), _serverCard(), _senderCard()],
           ),
         ),
         bottomNavigationBar: SafeArea(
@@ -330,8 +329,8 @@ class _NotifyChannelFormPageState
           Text(
             '加密方式',
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 6),
           SizedBox(
@@ -404,9 +403,11 @@ class _NotifyChannelFormPageState
               isDense: true,
               suffixIcon: IconButton(
                 tooltip: _obscurePassword ? '显示密码' : '隐藏密码',
-                icon: Icon(_obscurePassword
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined),
+                icon: Icon(
+                  _obscurePassword
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                ),
                 onPressed: () =>
                     setState(() => _obscurePassword = !_obscurePassword),
               ),
@@ -472,6 +473,7 @@ class _NotifyChannelFormPageState
             hint: 'ops@example.com',
             keyboardType: TextInputType.emailAddress,
             initialValues: _recipients,
+            minItems: 1,
             validator: validateEmail,
             onChanged: (values) {
               _recipients = values;

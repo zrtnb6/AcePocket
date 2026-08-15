@@ -25,7 +25,7 @@ class TaskRepository {
     required int limit,
   }) async {
     final data = await _api.get('/task', query: {'page': page, 'limit': limit});
-    return PageResult.fromJson(data, TaskItem.fromJson);
+    return Paged.fromJson(data, TaskItem.fromJson);
   }
 
   /// 任务详情（`GET /api/task/{id}`）。
@@ -48,13 +48,13 @@ class TaskRepository {
     int offset = 0,
     int limit = 500,
   }) async {
-    final data = await _api.get('/file/tail', query: {
-      'path': path,
-      'offset': offset,
-      'limit': limit,
-    });
+    final data = await _api.get(
+      '/file/tail',
+      query: {'path': path, 'offset': offset, 'limit': limit},
+    );
     return FileTailResult.fromJson(
-        data is Map<String, dynamic> ? data : const {});
+      data is Map<String, dynamic> ? data : const {},
+    );
   }
 
   /// 清空日志文件（`POST /api/file/truncate`）。

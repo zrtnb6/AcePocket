@@ -332,8 +332,11 @@ class _FsTypeDialogState extends State<_FsTypeDialog> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.warning_amber_rounded,
-                      size: 18, color: theme.colorScheme.onErrorContainer),
+                  Icon(
+                    Icons.warning_amber_rounded,
+                    size: 18,
+                    color: theme.colorScheme.onErrorContainer,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -426,8 +429,7 @@ Future<String?> showDeviceSelectDialog(
                               style: const TextStyle(fontFamily: 'monospace'),
                             ),
                             subtitle: Text(formatBytes(item.size)),
-                            onTap: () =>
-                                Navigator.of(context).pop(item.device),
+                            onTap: () => Navigator.of(context).pop(item.device),
                           );
                         },
                       ),
@@ -778,9 +780,7 @@ class _ExtendLvDialogState extends State<_ExtendLvDialog> {
               contentPadding: EdgeInsets.zero,
               value: _resize,
               title: const Text('同步扩展文件系统'),
-              subtitle: const Text(
-                'ext3/ext4 直接扩展；xfs、btrfs 必须已挂载，否则接口会报错',
-              ),
+              subtitle: const Text('ext3/ext4 直接扩展；xfs、btrfs 必须已挂载，否则接口会报错'),
               onChanged: (value) => setState(() => _resize = value),
             ),
           ],

@@ -15,13 +15,15 @@ class TerminalSettings {
       fontSize: rawFont is num
           ? rawFont.toDouble().clamp(minFontSize, maxFontSize).toDouble()
           : defaultFontSize,
-      showKeyboardBar:
-          json['show_keyboard_bar'] is bool ? json['show_keyboard_bar'] as bool : true,
+      showKeyboardBar: json['show_keyboard_bar'] is bool
+          ? json['show_keyboard_bar'] as bool
+          : true,
       scrollback: rawScrollback is num
           ? rawScrollback.toInt().clamp(minScrollback, maxScrollback).toInt()
           : defaultScrollback,
-      autoReconnect:
-          json['auto_reconnect'] is bool ? json['auto_reconnect'] as bool : true,
+      autoReconnect: json['auto_reconnect'] is bool
+          ? json['auto_reconnect'] as bool
+          : true,
     );
   }
 
@@ -60,11 +62,11 @@ class TerminalSettings {
   }
 
   Map<String, dynamic> toJson() => {
-        'font_size': fontSize,
-        'show_keyboard_bar': showKeyboardBar,
-        'scrollback': scrollback,
-        'auto_reconnect': autoReconnect,
-      };
+    'font_size': fontSize,
+    'show_keyboard_bar': showKeyboardBar,
+    'scrollback': scrollback,
+    'auto_reconnect': autoReconnect,
+  };
 
   @override
   bool operator ==(Object other) =>

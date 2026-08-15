@@ -46,11 +46,11 @@ class MonitorSetting {
   }
 
   Map<String, dynamic> toJson() => {
-        'enabled': enabled,
-        'days': days,
-        'interval': interval,
-        'alert_days': alertDays,
-      };
+    'enabled': enabled,
+    'days': days,
+    'interval': interval,
+    'alert_days': alertDays,
+  };
 
   MonitorSetting copyWith({
     bool? enabled,
@@ -225,7 +225,7 @@ class MonitorDetail {
     return MonitorDetail(
       times:
           (json['times'] as List?)?.map((e) => e.toString()).toList() ??
-              const [],
+          const [],
       load: json['load'] is Map<String, dynamic>
           ? LoadSeries.fromJson(json['load'] as Map<String, dynamic>)
           : const LoadSeries(load1: [], load5: [], load15: []),
@@ -238,12 +238,14 @@ class MonitorDetail {
       swap: json['swap'] is Map<String, dynamic>
           ? SwapSeries.fromJson(json['swap'] as Map<String, dynamic>)
           : const SwapSeries(total: 0, used: [], free: []),
-      net: (json['net'] as List?)
+      net:
+          (json['net'] as List?)
               ?.whereType<Map<String, dynamic>>()
               .map(NetworkSeries.fromJson)
               .toList() ??
           const [],
-      diskIo: (json['disk_io'] as List?)
+      diskIo:
+          (json['disk_io'] as List?)
               ?.whereType<Map<String, dynamic>>()
               .map(DiskIoSeries.fromJson)
               .toList() ??

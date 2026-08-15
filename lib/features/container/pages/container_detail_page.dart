@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/utils/format.dart';
 import '../../../core/widgets/a11y.dart';
+import '../../../core/widgets/animated_reveal.dart';
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_view.dart';
 import '../../../core/widgets/section_card.dart';
@@ -100,8 +102,9 @@ class ContainerDetailPage extends ConsumerWidget {
               itemBuilder: (context) {
                 final theme = Theme.of(context);
                 return [
-                  for (final action
-                      in availableContainerActions(async.value!.state.status))
+                  for (final action in availableContainerActions(
+                    async.value!.state.status,
+                  ))
                     PopupMenuItem<ContainerAction>(
                       value: action,
                       child: Row(
@@ -190,7 +193,10 @@ class _BasicCard extends StatelessWidget {
             InfoRow(label: '退出码', value: '${info.state.exitCode}'),
           if (info.state.error.isNotEmpty)
             InfoRow(label: '错误信息', value: info.state.error),
-          InfoRow(label: '进程 PID', value: info.state.pid <= 0 ? '-' : '${info.state.pid}'),
+          InfoRow(
+            label: '进程 PID',
+            value: info.state.pid <= 0 ? '-' : '${info.state.pid}',
+          ),
           InfoRow(label: '重启次数', value: '${info.restartCount}'),
           InfoRow(label: '重启策略', value: host.restartPolicy),
           InfoRow(label: '特权模式', value: host.privileged ? '是' : '否'),
@@ -257,8 +263,7 @@ class _NetworkCard extends StatelessWidget {
                       values: [
                         if (network.ipAddress.isNotEmpty)
                           'IP ${network.ipAddress}',
-                        if (network.gateway.isNotEmpty)
-                          '网关 ${network.gateway}',
+                        if (network.gateway.isNotEmpty) '网关 ${network.gateway}',
                         if (network.macAddress.isNotEmpty)
                           'MAC ${network.macAddress}',
                       ],
@@ -397,12 +402,12 @@ class _RawCardState extends State<_RawCard> {
         onPressed: () => setState(() => _expanded = !_expanded),
         child: Text(_expanded ? '收起' : '展开'),
       ),
-      child: _expanded
-          ? MonoBlock(
-              text: _encoder.convert(widget.info.raw),
-              maxHeight: 360,
-            )
-          : const SizedBox.shrink(),
+      child: AnimatedReveal(
+        visible: _expanded,
+        child: _expanded
+            ? MonoBlock(text: _encoder.convert(widget.info.raw), maxHeight: 360)
+            : const SizedBox.shrink(),
+      ),
     );
   }
 }

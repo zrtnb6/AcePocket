@@ -80,8 +80,7 @@ class _TokenEditorDialogState extends State<_TokenEditorDialog> {
     setState(() {
       _presetDays = 0;
       // 统一取当天 23:59:59，避免选当天时刚好早于当前时间被服务端拒绝。
-      _expiredAt =
-          DateTime(picked.year, picked.month, picked.day, 23, 59, 59);
+      _expiredAt = DateTime(picked.year, picked.month, picked.day, 23, 59, 59);
     });
   }
 
@@ -126,10 +125,7 @@ class _TokenEditorDialogState extends State<_TokenEditorDialog> {
                         ),
                       ),
                     ),
-                    TextButton(
-                      onPressed: _pickDate,
-                      child: const Text('选择日期'),
-                    ),
+                    TextButton(onPressed: _pickDate, child: const Text('选择日期')),
                   ],
                 ),
               ),
@@ -155,9 +151,9 @@ class _TokenEditorDialogState extends State<_TokenEditorDialog> {
               showErrorSnack(context, '过期时间必须晚于当前时间');
               return;
             }
-            Navigator.of(context).pop(
-              TokenEditorResult(ips: _ips, expiredAt: _expiredAt),
-            );
+            Navigator.of(
+              context,
+            ).pop(TokenEditorResult(ips: _ips, expiredAt: _expiredAt));
           },
           child: Text(isCreate ? '创建' : '保存'),
         ),
@@ -167,10 +163,7 @@ class _TokenEditorDialogState extends State<_TokenEditorDialog> {
 }
 
 /// 创建成功后展示令牌明文（仅此一次）。
-Future<void> showTokenCreatedDialog(
-  BuildContext context,
-  UserToken token,
-) {
+Future<void> showTokenCreatedDialog(BuildContext context, UserToken token) {
   return showDialog<void>(
     context: context,
     barrierDismissible: false,

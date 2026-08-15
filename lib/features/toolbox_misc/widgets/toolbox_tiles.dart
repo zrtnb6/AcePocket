@@ -1,53 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// 只读信息行：左标题右取值。
-class InfoRow extends StatelessWidget {
-  const InfoRow({
-    super.key,
-    required this.label,
-    required this.value,
-    this.valueColor,
-    this.monospace = false,
-    this.labelWidth = 96,
-  });
-
-  final String label;
-  final String value;
-  final Color? valueColor;
-  final bool monospace;
-  final double labelWidth;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: labelWidth,
-            child: Text(
-              label,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value.isEmpty ? '—' : value,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: valueColor,
-                fontFamily: monospace ? 'monospace' : null,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+export '../../../core/widgets/info_row.dart';
 
 /// 可编辑的配置行：标题 + 当前值 +（可选）说明，点击进入编辑。
 class SettingValueTile extends StatelessWidget {
@@ -108,9 +61,11 @@ class SettingValueTile extends StatelessWidget {
       trailing: busy
           ? const BusyIndicator()
           : (onTap == null
-              ? null
-              : Icon(Icons.chevron_right,
-                  color: theme.colorScheme.onSurfaceVariant)),
+                ? null
+                : Icon(
+                    Icons.chevron_right,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  )),
       onTap: busy ? null : onTap,
     );
   }
@@ -124,10 +79,10 @@ class BusyIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-        width: size,
-        height: size,
-        child: const CircularProgressIndicator(strokeWidth: 2),
-      );
+    width: size,
+    height: size,
+    child: const CircularProgressIndicator(strokeWidth: 2),
+  );
 }
 
 /// 小标签（协议 / 状态 / 类型等）。
@@ -164,11 +119,7 @@ class TagChip extends StatelessWidget {
 
 /// 分区内的错误提示行（某个分区加载失败时使用），带重试按钮。
 class SectionErrorTile extends StatelessWidget {
-  const SectionErrorTile({
-    super.key,
-    required this.message,
-    this.onRetry,
-  });
+  const SectionErrorTile({super.key, required this.message, this.onRetry});
 
   final String message;
   final VoidCallback? onRetry;
@@ -247,7 +198,9 @@ class ScoreTile extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
-            color: score > 0 ? theme.colorScheme.onSurface : theme.colorScheme.onSurfaceVariant,
+            color: score > 0
+                ? theme.colorScheme.onSurface
+                : theme.colorScheme.onSurfaceVariant,
           ),
         ),
         Text(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/widgets/a11y.dart';
+import '../../../core/widgets/animated_reveal.dart';
 import '../models/json_utils.dart';
 import '../models/website_setting.dart';
 import 'kv_list_field.dart';
@@ -68,12 +69,14 @@ class _UpstreamListFieldState extends State<UpstreamListField> {
           alignment: Alignment.centerLeft,
           child: TextButton.icon(
             onPressed: () {
-              widget.upstreams.add(UpstreamConfig(
-                name: 'backend',
-                servers: {'127.0.0.1:8080': ''},
-                algo: '',
-                keepalive: 0,
-              ));
+              widget.upstreams.add(
+                UpstreamConfig(
+                  name: 'backend',
+                  servers: {'127.0.0.1:8080': ''},
+                  algo: '',
+                  keepalive: 0,
+                ),
+              );
               setState(() {});
               widget.onChanged();
             },
@@ -103,10 +106,12 @@ class _UpstreamCard extends StatefulWidget {
 }
 
 class _UpstreamCardState extends State<_UpstreamCard> {
-  late final TextEditingController _name =
-      TextEditingController(text: widget.upstream.name);
-  late final TextEditingController _keepalive =
-      TextEditingController(text: '${widget.upstream.keepalive}');
+  late final TextEditingController _name = TextEditingController(
+    text: widget.upstream.name,
+  );
+  late final TextEditingController _keepalive = TextEditingController(
+    text: '${widget.upstream.keepalive}',
+  );
 
   static const _algos = ['', 'least_conn', 'ip_hash', 'random'];
 
@@ -179,16 +184,23 @@ class _UpstreamCardState extends State<_UpstreamCard> {
                         child: DropdownButtonFormField<String>(
                           initialValue: _algos.contains(u.algo) ? u.algo : '',
                           isExpanded: true,
-                          decoration:
-                              const InputDecoration(labelText: '负载均衡算法'),
+                          decoration: const InputDecoration(
+                            labelText: '负载均衡算法',
+                          ),
                           items: const [
                             DropdownMenuItem(value: '', child: Text('轮询（默认）')),
                             DropdownMenuItem(
-                                value: 'least_conn', child: Text('最少连接')),
+                              value: 'least_conn',
+                              child: Text('最少连接'),
+                            ),
                             DropdownMenuItem(
-                                value: 'ip_hash', child: Text('IP 哈希')),
+                              value: 'ip_hash',
+                              child: Text('IP 哈希'),
+                            ),
                             DropdownMenuItem(
-                                value: 'random', child: Text('随机')),
+                              value: 'random',
+                              child: Text('随机'),
+                            ),
                           ],
                           onChanged: (v) {
                             setState(() => u.algo = v ?? '');
@@ -201,8 +213,7 @@ class _UpstreamCardState extends State<_UpstreamCard> {
                         child: TextFormField(
                           controller: _keepalive,
                           keyboardType: TextInputType.number,
-                          autovalidateMode:
-                              AutovalidateMode.onUserInteraction,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: const InputDecoration(
                             labelText: '保持连接数',
                             hintText: '0',
@@ -311,16 +322,21 @@ class _ProxyCard extends StatefulWidget {
 }
 
 class _ProxyCardState extends State<_ProxyCard> {
-  late final TextEditingController _location =
-      TextEditingController(text: widget.proxy.location);
-  late final TextEditingController _pass =
-      TextEditingController(text: widget.proxy.pass);
-  late final TextEditingController _host =
-      TextEditingController(text: widget.proxy.host);
-  late final TextEditingController _sni =
-      TextEditingController(text: widget.proxy.sni);
+  late final TextEditingController _location = TextEditingController(
+    text: widget.proxy.location,
+  );
+  late final TextEditingController _pass = TextEditingController(
+    text: widget.proxy.pass,
+  );
+  late final TextEditingController _host = TextEditingController(
+    text: widget.proxy.host,
+  );
+  late final TextEditingController _sni = TextEditingController(
+    text: widget.proxy.sni,
+  );
   late final TextEditingController _bodySize = TextEditingController(
-      text: '${jInt(widget.proxy.extra['client_max_body_size'])}');
+    text: '${jInt(widget.proxy.extra['client_max_body_size'])}',
+  );
 
   bool _expanded = false;
 
@@ -420,13 +436,14 @@ class _ProxyCardState extends State<_ProxyCard> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: DropdownButtonFormField<String>(
-                          initialValue: const ['1.0', '1.1', '2']
-                                  .contains(p.httpVersion)
+                          initialValue:
+                              const ['1.0', '1.1', '2'].contains(p.httpVersion)
                               ? p.httpVersion
                               : '1.1',
                           isExpanded: true,
-                          decoration:
-                              const InputDecoration(labelText: 'HTTP 版本'),
+                          decoration: const InputDecoration(
+                            labelText: 'HTTP 版本',
+                          ),
                           items: const [
                             DropdownMenuItem(value: '1.0', child: Text('1.0')),
                             DropdownMenuItem(value: '1.1', child: Text('1.1')),
@@ -445,70 +462,74 @@ class _ProxyCardState extends State<_ProxyCard> {
                     alignment: Alignment.centerLeft,
                     child: TextButton.icon(
                       onPressed: () => setState(() => _expanded = !_expanded),
-                      icon: Icon(_expanded
-                          ? Icons.expand_less
-                          : Icons.expand_more),
+                      icon: ExpandChevron(expanded: _expanded),
                       label: Text(_expanded ? '收起高级选项' : '展开高级选项'),
                     ),
                   ),
-                  if (_expanded) ...[
-                    TextField(
-                      controller: _sni,
-                      decoration: const InputDecoration(
-                        labelText: '代理 SNI',
-                        hintText: 'example.com',
-                      ),
-                      onChanged: (v) {
-                        p.sni = v.trim();
-                        widget.onChanged();
-                      },
+                  AnimatedReveal(
+                    visible: _expanded,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextField(
+                          controller: _sni,
+                          decoration: const InputDecoration(
+                            labelText: '代理 SNI',
+                            hintText: 'example.com',
+                          ),
+                          onChanged: (v) {
+                            p.sni = v.trim();
+                            widget.onChanged();
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        TextFormField(
+                          controller: _bodySize,
+                          keyboardType: TextInputType.number,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: const InputDecoration(
+                            labelText: '请求体大小限制（字节）',
+                            hintText: '0 表示使用全局配置',
+                          ),
+                          validator: (value) =>
+                              _validateNonNegativeInt(value, '留空或 0 表示使用全局配置'),
+                          onChanged: (v) {
+                            final t = v.trim();
+                            final n = t.isEmpty ? 0 : int.tryParse(t);
+                            // 非法输入不写回模型，由 validator 提示用户修正。
+                            if (n != null && n >= 0) {
+                              p.extra['client_max_body_size'] = n;
+                            }
+                            widget.onChanged();
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        KeyValueListField(
+                          label: '自定义请求头',
+                          initialValues: jStringMap(p.extra['headers']),
+                          keyHint: 'X-Custom-Header',
+                          valueHint: 'value',
+                          addButtonText: '添加请求头',
+                          onChanged: (v) {
+                            p.extra['headers'] = v;
+                            widget.onChanged();
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        KeyValueListField(
+                          label: '响应内容替换',
+                          initialValues: jStringMap(p.extra['replaces']),
+                          keyHint: '/old',
+                          valueHint: '/new',
+                          addButtonText: '添加替换',
+                          onChanged: (v) {
+                            p.extra['replaces'] = v;
+                            widget.onChanged();
+                          },
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: _bodySize,
-                      keyboardType: TextInputType.number,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      decoration: const InputDecoration(
-                        labelText: '请求体大小限制（字节）',
-                        hintText: '0 表示使用全局配置',
-                      ),
-                      validator: (value) =>
-                          _validateNonNegativeInt(value, '留空或 0 表示使用全局配置'),
-                      onChanged: (v) {
-                        final t = v.trim();
-                        final n = t.isEmpty ? 0 : int.tryParse(t);
-                        // 非法输入不写回模型，由 validator 提示用户修正。
-                        if (n != null && n >= 0) {
-                          p.extra['client_max_body_size'] = n;
-                        }
-                        widget.onChanged();
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    KeyValueListField(
-                      label: '自定义请求头',
-                      initialValues: jStringMap(p.extra['headers']),
-                      keyHint: 'X-Custom-Header',
-                      valueHint: 'value',
-                      addButtonText: '添加请求头',
-                      onChanged: (v) {
-                        p.extra['headers'] = v;
-                        widget.onChanged();
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    KeyValueListField(
-                      label: '响应内容替换',
-                      initialValues: jStringMap(p.extra['replaces']),
-                      keyHint: '/old',
-                      valueHint: '/new',
-                      addButtonText: '添加替换',
-                      onChanged: (v) {
-                        p.extra['replaces'] = v;
-                        widget.onChanged();
-                      },
-                    ),
-                  ],
+                  ),
                 ],
               ),
             ),

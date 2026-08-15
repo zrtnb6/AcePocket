@@ -17,23 +17,23 @@ import 'format_utils.dart';
     case 'PANIC':
       return (
         background: scheme.errorContainer,
-        foreground: scheme.onErrorContainer
+        foreground: scheme.onErrorContainer,
       );
     case 'WARN':
     case 'WARNING':
       return (
         background: scheme.tertiaryContainer,
-        foreground: scheme.onTertiaryContainer
+        foreground: scheme.onTertiaryContainer,
       );
     case 'INFO':
       return (
         background: scheme.secondaryContainer,
-        foreground: scheme.onSecondaryContainer
+        foreground: scheme.onSecondaryContainer,
       );
     default:
       return (
         background: scheme.surfaceContainerHighest,
-        foreground: scheme.onSurfaceVariant
+        foreground: scheme.onSurfaceVariant,
       );
   }
 }
@@ -146,8 +146,7 @@ class LogEntryTile extends StatelessWidget {
               data: theme.copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-                childrenPadding:
-                    const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                 title: content,
                 children: [
                   if (longMessage)
@@ -175,10 +174,7 @@ class LogEntryTile extends StatelessWidget {
               ),
             )
           : Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: content,
             ),
     );
@@ -226,16 +222,19 @@ class SshLogTile extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: background,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
                     success ? '成功' : '失败',
-                    style: theme.textTheme.labelSmall
-                        ?.copyWith(color: foreground),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: foreground,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),

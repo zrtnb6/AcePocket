@@ -37,9 +37,12 @@ class CertAccountFormPage extends ConsumerWidget {
           final cas = options.caProviders.isEmpty
               ? [
                   for (final entry in CertAccount.caLabels.entries)
-                    (entry.key, entry.value)
+                    (entry.key, entry.value),
                 ]
-              : [for (final item in options.caProviders) (item.value, item.label)];
+              : [
+                  for (final item in options.caProviders)
+                    (item.value, item.label),
+                ];
           final algorithms = options.algorithms.isEmpty
               ? const [
                   ('P256', 'EC256'),
@@ -48,7 +51,8 @@ class CertAccountFormPage extends ConsumerWidget {
                   ('4096', 'RSA4096'),
                 ]
               : [
-                  for (final item in options.algorithms) (item.value, item.label)
+                  for (final item in options.algorithms)
+                    (item.value, item.label),
                 ];
 
           if (accountId == null) {
@@ -90,12 +94,15 @@ class _AccountForm extends ConsumerStatefulWidget {
 }
 
 class _AccountFormState extends ConsumerState<_AccountForm> {
-  late final TextEditingController _emailController =
-      TextEditingController(text: widget.account?.email ?? '');
-  late final TextEditingController _kidController =
-      TextEditingController(text: widget.account?.kid ?? '');
-  late final TextEditingController _hmacController =
-      TextEditingController(text: widget.account?.hmacEncoded ?? '');
+  late final TextEditingController _emailController = TextEditingController(
+    text: widget.account?.email ?? '',
+  );
+  late final TextEditingController _kidController = TextEditingController(
+    text: widget.account?.kid ?? '',
+  );
+  late final TextEditingController _hmacController = TextEditingController(
+    text: widget.account?.hmacEncoded ?? '',
+  );
 
   late String _ca = widget.account?.ca ?? 'letsencrypt';
   late String _keyType = widget.account?.keyType ?? 'P256';
@@ -169,8 +176,11 @@ class _AccountFormState extends ConsumerState<_AccountForm> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.info_outline,
-                      size: 20, color: theme.colorScheme.primary),
+                  Icon(
+                    Icons.info_outline,
+                    size: 20,
+                    color: theme.colorScheme.primary,
+                  ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -281,11 +291,13 @@ class _AccountFormState extends ConsumerState<_AccountForm> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.save_outlined),
-                label: Text(_submitting
-                    ? '正在向 CA 注册…'
-                    : widget.account == null
-                        ? '注册账户'
-                        : '保存'),
+                label: Text(
+                  _submitting
+                      ? '正在向 CA 注册…'
+                      : widget.account == null
+                      ? '注册账户'
+                      : '保存',
+                ),
               ),
             ),
           ],

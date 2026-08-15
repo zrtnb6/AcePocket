@@ -212,7 +212,8 @@ class _ContainerListPageState extends ConsumerState<ContainerListPage> {
       if (installed.valueOrNull == false) {
         return NotInstalledView(
           title: '未安装容器引擎',
-          message: '容器管理需要面板已安装 Docker（或 Podman）应用，'
+          message:
+              '容器管理需要面板已安装 Docker（或 Podman）应用，'
               '请先到应用商店安装后再使用本功能。',
           icon: Icons.directions_boat_outlined,
           onRecheck: () {
@@ -232,7 +233,7 @@ class _ContainerListPageState extends ConsumerState<ContainerListPage> {
       onRefresh: () => ref.read(containersProvider.notifier).refresh(),
       onLoadMore: () => ref.read(containersProvider.notifier).loadMore(),
       onRetry: () => ref.invalidate(containersProvider),
-      itemBuilder: (context, item) => ContainerTile(
+      itemBuilder: (context, item, _) => ContainerTile(
         item: item,
         onTap: () => context.push('/containers/${item.id}'),
         onShowLogs: () => context.push('/containers/${item.id}/logs'),
@@ -281,11 +282,7 @@ class _QuickNavBar extends StatelessWidget {
 }
 
 class _NavChip extends StatelessWidget {
-  const _NavChip({
-    required this.icon,
-    required this.label,
-    required this.path,
-  });
+  const _NavChip({required this.icon, required this.label, required this.path});
 
   final IconData icon;
   final String label;

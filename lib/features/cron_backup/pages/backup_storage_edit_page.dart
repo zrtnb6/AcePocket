@@ -23,8 +23,7 @@ class BackupStorageEditPage extends ConsumerStatefulWidget {
       _BackupStorageEditPageState();
 }
 
-class _BackupStorageEditPageState
-    extends ConsumerState<BackupStorageEditPage> {
+class _BackupStorageEditPageState extends ConsumerState<BackupStorageEditPage> {
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
@@ -67,20 +66,20 @@ class _BackupStorageEditPageState
 
   /// 全部输入控制器，便于统一挂 / 摘监听与释放。
   List<TextEditingController> get _controllers => [
-        _nameController,
-        _accessKeyController,
-        _secretKeyController,
-        _regionController,
-        _endpointController,
-        _bucketController,
-        _urlController,
-        _hostController,
-        _portController,
-        _usernameController,
-        _passwordController,
-        _privateKeyController,
-        _pathController,
-      ];
+    _nameController,
+    _accessKeyController,
+    _secretKeyController,
+    _regionController,
+    _endpointController,
+    _bucketController,
+    _urlController,
+    _hostController,
+    _portController,
+    _usernameController,
+    _passwordController,
+    _privateKeyController,
+    _pathController,
+  ];
 
   @override
   void initState() {
@@ -127,8 +126,7 @@ class _BackupStorageEditPageState
       _loadError = null;
     });
     try {
-      final storage =
-          await ref.read(backupStorageRepoProvider).get(widget.id!);
+      final storage = await ref.read(backupStorageRepoProvider).get(widget.id!);
       if (!mounted) return;
       final info = storage.info;
       _suppressDirty = true;
@@ -170,18 +168,16 @@ class _BackupStorageEditPageState
     final server = ref.watch(activeServerProvider);
     return UnsavedChangesGuard(
       hasUnsavedChanges: _dirty && !_saving,
-      message: _isEdit
-          ? '存储配置的修改还没有保存，确定放弃吗？'
-          : '新建的存储还没有创建，确定放弃吗？',
+      message: _isEdit ? '存储配置的修改还没有保存，确定放弃吗？' : '新建的存储还没有创建，确定放弃吗？',
       child: Scaffold(
         appBar: AppBar(title: Text(_isEdit ? '编辑备份存储' : '添加备份存储')),
         body: server == null
             ? const NoServerView()
             : _loading
-                ? const LoadingView(message: '正在加载存储配置…')
-                : _loadError != null
-                    ? ErrorView(error: _loadError!, onRetry: _load)
-                    : _buildForm(),
+            ? const LoadingView(message: '正在加载存储配置…')
+            : _loadError != null
+            ? ErrorView(error: _loadError!, onRetry: _load)
+            : _buildForm(),
         bottomNavigationBar: server == null || _loading || _loadError != null
             ? null
             : SafeArea(
@@ -284,7 +280,8 @@ class _BackupStorageEditPageState
               ),
               DropdownMenuItem(value: 'path', child: Text('Path')),
             ],
-            onChanged: (v) => _updateField(() => _style = v ?? 'virtual-hosted'),
+            onChanged: (v) =>
+                _updateField(() => _style = v ?? 'virtual-hosted'),
           ),
           const SizedBox(height: 16),
           TextFormField(

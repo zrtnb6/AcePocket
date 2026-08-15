@@ -127,7 +127,9 @@ class _FilePropertySheetState extends ConsumerState<FilePropertySheet> {
                   Row(
                     children: [
                       Icon(
-                        info.dir ? Icons.folder_outlined : Icons.description_outlined,
+                        info.dir
+                            ? Icons.folder_outlined
+                            : Icons.description_outlined,
                         color: theme.colorScheme.primary,
                       ),
                       const SizedBox(width: 8),
@@ -143,8 +145,7 @@ class _FilePropertySheetState extends ConsumerState<FilePropertySheet> {
                   ),
                   const SizedBox(height: 12),
                   _row('路径', info.full, copyable: true),
-                  _row('类型',
-                      info.dir ? '目录' : (info.symlink ? '符号链接' : '文件')),
+                  _row('类型', info.dir ? '目录' : (info.symlink ? '符号链接' : '文件')),
                   if (info.symlink) _row('链接指向', info.link),
                   _row(
                     '大小',
@@ -160,8 +161,9 @@ class _FilePropertySheetState extends ConsumerState<FilePropertySheet> {
                     const SizedBox(height: 8),
                     Text(
                       _sizeError!,
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: theme.colorScheme.error),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.error,
+                      ),
                     ),
                   ],
                   const SizedBox(height: 12),
@@ -175,7 +177,8 @@ class _FilePropertySheetState extends ConsumerState<FilePropertySheet> {
                                   width: 16,
                                   height: 16,
                                   child: CircularProgressIndicator(
-                                      strokeWidth: 2),
+                                    strokeWidth: 2,
+                                  ),
                                 )
                               : const Icon(Icons.straighten),
                           label: Text(_calculating ? '计算中…' : '计算大小'),

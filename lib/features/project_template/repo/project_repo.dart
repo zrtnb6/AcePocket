@@ -28,12 +28,11 @@ class ProjectRepo {
     required int limit,
     String type = 'all',
   }) async {
-    final data = await _api.get('/project', query: {
-      'type': type,
-      'page': page,
-      'limit': limit,
-    });
-    return PageResult.parse(data, ProjectDetail.fromJson);
+    final data = await _api.get(
+      '/project',
+      query: {'type': type, 'page': page, 'limit': limit},
+    );
+    return Paged.parse(data, ProjectDetail.fromJson);
   }
 
   /// 项目详情：GET /api/project/{id}。
@@ -70,30 +69,30 @@ class ProjectRepo {
 
   /// 服务是否在运行：GET /api/systemctl/status?service=。
   Future<bool> serviceRunning(String service) async {
-    final data = await _api.get('/systemctl/status', query: {
-      'service': service,
-    });
+    final data = await _api.get(
+      '/systemctl/status',
+      query: {'service': service},
+    );
     return data == true;
   }
 
   /// 服务是否已设置自启：GET /api/systemctl/is_enabled?service=。
   Future<bool> serviceEnabled(String service) async {
-    final data = await _api.get('/systemctl/is_enabled', query: {
-      'service': service,
-    });
+    final data = await _api.get(
+      '/systemctl/is_enabled',
+      query: {'service': service},
+    );
     return data == true;
   }
 
   /// 启动服务：POST /api/systemctl/start。
-  Future<void> start(String service) =>
-      _post('/systemctl/start', service);
+  Future<void> start(String service) => _post('/systemctl/start', service);
 
   /// 停止服务：POST /api/systemctl/stop。
   Future<void> stop(String service) => _post('/systemctl/stop', service);
 
   /// 重启服务：POST /api/systemctl/restart。
-  Future<void> restart(String service) =>
-      _post('/systemctl/restart', service);
+  Future<void> restart(String service) => _post('/systemctl/restart', service);
 
   /// 重载服务：POST /api/systemctl/reload。
   Future<void> reload(String service) => _post('/systemctl/reload', service);
@@ -102,8 +101,7 @@ class ProjectRepo {
   Future<void> enable(String service) => _post('/systemctl/enable', service);
 
   /// 关闭自启：POST /api/systemctl/disable。
-  Future<void> disable(String service) =>
-      _post('/systemctl/disable', service);
+  Future<void> disable(String service) => _post('/systemctl/disable', service);
 
   /// 清空服务日志：POST /api/systemctl/clear_log。
   Future<void> clearLog(String service) =>

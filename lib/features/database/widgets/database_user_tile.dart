@@ -37,10 +37,7 @@ class DatabaseUserTile extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 2),
-            child: Icon(
-              Icons.person_outline,
-              color: theme.colorScheme.primary,
-            ),
+            child: Icon(Icons.person_outline, color: theme.colorScheme.primary),
           ),
           const SizedBox(width: 12),
           Expanded(

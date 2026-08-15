@@ -65,7 +65,8 @@ class _DatabaseServersPageState extends ConsumerState<DatabaseServersPage> {
 
     final ok = await runGuarded(
       context,
-      () => ref.read(databaseRepoProvider).updateServerRemark(server.id, remark),
+      () =>
+          ref.read(databaseRepoProvider).updateServerRemark(server.id, remark),
       success: '备注已更新',
     );
     if (ok) await _refresh();
@@ -103,7 +104,8 @@ class _DatabaseServersPageState extends ConsumerState<DatabaseServersPage> {
     final ok = await showConfirmDialog(
       context,
       title: '删除数据库服务器',
-      content: '确定要从面板中移除「${server.name}」吗？\n'
+      content:
+          '确定要从面板中移除「${server.name}」吗？\n'
           '仅删除面板中的记录，不会删除数据库本身的数据。',
       confirmText: '删除',
       danger: true,

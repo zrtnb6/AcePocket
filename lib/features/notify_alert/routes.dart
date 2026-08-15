@@ -35,8 +35,8 @@ final List<RouteBase> notifyAlertRoutes = <RouteBase>[
         path: 'rules/:id/edit',
         builder: (BuildContext context, GoRouterState state) =>
             AlertRuleFormPage(
-          ruleId: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
-        ),
+              ruleId: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+            ),
       ),
     ],
   ),
@@ -53,15 +53,14 @@ final List<RouteBase> notifyAlertRoutes = <RouteBase>[
         path: 'channels/:id/edit',
         builder: (BuildContext context, GoRouterState state) =>
             NotifyChannelFormPage(
-          channelId: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
-        ),
+              channelId: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+            ),
       ),
     ],
   ),
   GoRoute(
     path: '/webhooks',
-    builder: (BuildContext context, GoRouterState state) =>
-        const WebhookPage(),
+    builder: (BuildContext context, GoRouterState state) => const WebhookPage(),
     routes: <RouteBase>[
       GoRoute(
         path: 'new',
@@ -70,8 +69,7 @@ final List<RouteBase> notifyAlertRoutes = <RouteBase>[
       ),
       GoRoute(
         path: ':id/edit',
-        builder: (BuildContext context, GoRouterState state) =>
-            WebhookFormPage(
+        builder: (BuildContext context, GoRouterState state) => WebhookFormPage(
           webhookId: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
         ),
       ),

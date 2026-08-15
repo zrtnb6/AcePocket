@@ -86,7 +86,8 @@ class _ServerFormState extends ConsumerState<ServerForm> {
     _passwordController = TextEditingController(text: initial?.password ?? '');
     _allowSelfSigned = initial?.allowSelfSigned ?? false;
     _pinnedCertSha256 = initial?.pinnedCertSha256 ?? '';
-    _showAdvanced = widget.autoExpandAdvanced ||
+    _showAdvanced =
+        widget.autoExpandAdvanced ||
         (initial != null &&
             (initial.entrance.isNotEmpty ||
                 initial.username.isNotEmpty ||
@@ -142,8 +143,9 @@ class _ServerFormState extends ConsumerState<ServerForm> {
       });
       Object? error;
       try {
-        final result =
-            await ref.read(connectionTestRepoProvider).test(_buildConfig());
+        final result = await ref
+            .read(connectionTestRepoProvider)
+            .test(_buildConfig());
         if (mounted) setState(() => _testResult = result);
         return result;
       } catch (e) {
@@ -153,8 +155,10 @@ class _ServerFormState extends ConsumerState<ServerForm> {
       }
       if (!mounted) return null;
       if (error is CertificateTrustRequiredException) {
-        final trusted =
-            await showCertificateTrustDialog(context, error.certificate);
+        final trusted = await showCertificateTrustDialog(
+          context,
+          error.certificate,
+        );
         if (!mounted) return null;
         if (trusted) {
           final fingerprint = error.certificate.sha256Hex;
@@ -286,10 +290,12 @@ class _ServerFormState extends ConsumerState<ServerForm> {
               helperText: '在面板「设置 - API 令牌」中创建，仅创建时可见',
               prefixIcon: const Icon(Icons.key_outlined),
               border: const OutlineInputBorder(),
-              suffixIcon: IconButton(
-                icon: Icon(_obscureToken
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined),
+              suffixIcon: A11yIconButton(
+                icon: Icon(
+                  _obscureToken
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                ),
                 tooltip: _obscureToken ? '显示令牌' : '隐藏令牌',
                 onPressed: () => setState(() => _obscureToken = !_obscureToken),
               ),
@@ -306,8 +312,10 @@ class _ServerFormState extends ConsumerState<ServerForm> {
                     _invalidateTestResult();
                   },
             title: const Text('允许自签名证书'),
-            subtitle: const Text('面板使用自签名 / 无效 HTTPS 证书时开启。'
-                '首次连接需确认证书指纹（TOFU），之后证书变化将拒绝连接'),
+            subtitle: const Text(
+              '面板使用自签名 / 无效 HTTPS 证书时开启。'
+              '首次连接需确认证书指纹（TOFU），之后证书变化将拒绝连接',
+            ),
             contentPadding: EdgeInsets.zero,
           ),
           if (_pinnedCertSha256.isNotEmpty) ...[
@@ -321,8 +329,11 @@ class _ServerFormState extends ConsumerState<ServerForm> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.verified_user_outlined,
-                      size: 18, color: colorScheme.onSurfaceVariant),
+                  Icon(
+                    Icons.verified_user_outlined,
+                    size: 18,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -330,8 +341,9 @@ class _ServerFormState extends ConsumerState<ServerForm> {
                       children: [
                         Text(
                           '已记住服务器证书指纹（SHA-256）',
-                          style: theme.textTheme.bodySmall
-                              ?.copyWith(color: colorScheme.onSurfaceVariant),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
                         ),
                         const SizedBox(height: 2),
                         Text(
@@ -363,8 +375,9 @@ class _ServerFormState extends ConsumerState<ServerForm> {
           // ——— 高级选项 ———
           InkWell(
             borderRadius: BorderRadius.circular(8),
-            onTap:
-                _busy ? null : () => setState(() => _showAdvanced = !_showAdvanced),
+            onTap: _busy
+                ? null
+                : () => setState(() => _showAdvanced = !_showAdvanced),
             // 原行高约 36dp，不足 48dp 触摸目标下限；只扩命中区域不改视觉。
             child: minTouchTarget(
               child: Padding(
@@ -379,8 +392,9 @@ class _ServerFormState extends ConsumerState<ServerForm> {
                     const SizedBox(width: 4),
                     Text(
                       '高级选项（访问入口、面板账号）',
-                      style: theme.textTheme.labelLarge
-                          ?.copyWith(color: colorScheme.primary),
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: colorScheme.primary,
+                      ),
                     ),
                   ],
                 ),
@@ -414,15 +428,19 @@ class _ServerFormState extends ConsumerState<ServerForm> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.info_outline,
-                      size: 18, color: colorScheme.onSurfaceVariant),
+                  Icon(
+                    Icons.info_outline,
+                    size: 18,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       '终端、SSH、实时日志等功能走 WebSocket，面板不允许 API 令牌用于 '
                       'WebSocket，必须使用面板账号登录。若不使用这些功能可以不填。',
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: colorScheme.onSurfaceVariant),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ),
                 ],
@@ -453,10 +471,12 @@ class _ServerFormState extends ConsumerState<ServerForm> {
                 labelText: '面板密码（可选）',
                 prefixIcon: const Icon(Icons.lock_outline),
                 border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: Icon(_obscurePassword
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined),
+                suffixIcon: A11yIconButton(
+                  icon: Icon(
+                    _obscurePassword
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                  ),
                   tooltip: _obscurePassword ? '显示密码' : '隐藏密码',
                   onPressed: () =>
                       setState(() => _obscurePassword = !_obscurePassword),
@@ -476,8 +496,9 @@ class _ServerFormState extends ConsumerState<ServerForm> {
                 const SizedBox(width: 12),
                 Text(
                   '正在测试连接…',
-                  style: theme.textTheme.bodyMedium
-                      ?.copyWith(color: colorScheme.onSurfaceVariant),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),

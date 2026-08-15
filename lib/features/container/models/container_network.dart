@@ -62,8 +62,7 @@ class ContainerNetwork {
       .toList();
 
   /// 是否为 Docker 预置网络（不可删除）。
-  bool get isPredefined =>
-      name == 'bridge' || name == 'host' || name == 'none';
+  bool get isPredefined => name == 'bridge' || name == 'host' || name == 'none';
 }
 
 /// 网络 IP 分配管理（`ContainerNetworkIPAM`）。
@@ -85,9 +84,9 @@ class ContainerNetworkIpam {
       options: KV.listFromJson(json['options']),
       config: rawConfig is List
           ? rawConfig
-              .whereType<Map<String, dynamic>>()
-              .map(ContainerNetworkIpamConfig.fromJson)
-              .toList()
+                .whereType<Map<String, dynamic>>()
+                .map(ContainerNetworkIpamConfig.fromJson)
+                .toList()
           : const [],
     );
   }
@@ -135,11 +134,11 @@ class ContainerNetworkFamilyConfig {
   final String subnet;
 
   Map<String, dynamic> toJson() => {
-        'enabled': enabled,
-        'gateway': gateway,
-        'ip_range': ipRange,
-        'subnet': subnet,
-      };
+    'enabled': enabled,
+    'gateway': gateway,
+    'ip_range': ipRange,
+    'subnet': subnet,
+  };
 }
 
 /// 面板允许的网络驱动（源码 `validate:"in:bridge,host,overlay,macvlan,ipvlan,none"`）。

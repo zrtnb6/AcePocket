@@ -63,14 +63,13 @@ class _BackupListPageState extends ConsumerState<BackupListPage> {
           ),
         ],
       ),
-      floatingActionButton:
-          server == null || !BackupTypes.canCreate(_type)
-              ? null
-              : FloatingActionButton.extended(
-                  onPressed: _submitting ? null : _create,
-                  icon: const Icon(Icons.add),
-                  label: const Text('创建备份'),
-                ),
+      floatingActionButton: server == null || !BackupTypes.canCreate(_type)
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: _submitting ? null : _create,
+              icon: const Icon(Icons.add),
+              label: const Text('创建备份'),
+            ),
       body: server == null
           ? const NoServerView()
           : tabs.when(
@@ -80,10 +79,10 @@ class _BackupListPageState extends ConsumerState<BackupListPage> {
                 onRetry: () => ref.invalidate(backupTypeTabsProvider),
               ),
               data: (types) {
-                final available =
-                    types.isEmpty ? BackupTypes.listable : types;
-                final current =
-                    available.contains(_type) ? _type : available.first;
+                final available = types.isEmpty ? BackupTypes.listable : types;
+                final current = available.contains(_type)
+                    ? _type
+                    : available.first;
                 if (current != _type) {
                   // 当前类型不在可用列表中时回退到第一个。
                   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -116,8 +115,7 @@ class _BackupListPageState extends ConsumerState<BackupListPage> {
       ),
       data: (data) => PagedList<BackupFile>(
         state: data,
-        onRefresh: () =>
-            ref.read(backupListProvider(type).notifier).refresh(),
+        onRefresh: () => ref.read(backupListProvider(type).notifier).refresh(),
         onLoadMore: () => _loadMore(type),
         header: _Notice(type: type),
         emptyView: EmptyView(
@@ -177,18 +175,15 @@ class _BackupListPageState extends ConsumerState<BackupListPage> {
     final outcome = await showDownloadProgressDialog(
       context,
       fileName: file.name,
-      runner: ({
-        required savePath,
-        required onProgress,
-        required cancelToken,
-      }) =>
-          transfer.downloadBackup(
-        type: type,
-        fileName: file.name,
-        savePath: savePath,
-        onProgress: onProgress,
-        cancelToken: cancelToken,
-      ),
+      runner:
+          ({required savePath, required onProgress, required cancelToken}) =>
+              transfer.downloadBackup(
+                type: type,
+                fileName: file.name,
+                savePath: savePath,
+                onProgress: onProgress,
+                cancelToken: cancelToken,
+              ),
     );
     if (!mounted || outcome == null) return;
     if (outcome.cancelled) {
@@ -248,7 +243,8 @@ class _BackupListPageState extends ConsumerState<BackupListPage> {
     final ok = await showConfirmDialog(
       context,
       title: '上传备份文件',
-      content: '将「$name」上传到「${BackupTypes.label(type)}」备份目录。\n'
+      content:
+          '将「$name」上传到「${BackupTypes.label(type)}」备份目录。\n'
           '目录下已存在同名文件时面板会拒绝上传。',
       confirmText: '开始上传',
     );
@@ -283,11 +279,9 @@ class _BackupListPageState extends ConsumerState<BackupListPage> {
     if (result == null || !mounted) return;
     setState(() => _submitting = true);
     try {
-      await ref.read(backupRepoProvider).create(
-            type: type,
-            target: result.target,
-            storage: result.storage,
-          );
+      await ref
+          .read(backupRepoProvider)
+          .create(type: type, target: result.target, storage: result.storage);
       if (!mounted) return;
       showTaskSubmittedSnack(context, '备份任务已提交');
       await ref.read(backupListProvider(type).notifier).refresh();
@@ -308,11 +302,9 @@ class _BackupListPageState extends ConsumerState<BackupListPage> {
     if (target == null || !mounted) return;
     setState(() => _submitting = true);
     try {
-      await ref.read(backupRepoProvider).restore(
-            type: type,
-            file: file.path,
-            target: target,
-          );
+      await ref
+          .read(backupRepoProvider)
+          .restore(type: type, file: file.path, target: target);
       if (mounted) showTaskSubmittedSnack(context, '恢复任务已提交');
     } catch (e) {
       if (mounted) showErrorSnack(context, e);
@@ -396,8 +388,11 @@ class _Notice extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info_outline,
-              size: 18, color: theme.colorScheme.onSurfaceVariant),
+          Icon(
+            Icons.info_outline,
+            size: 18,
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(

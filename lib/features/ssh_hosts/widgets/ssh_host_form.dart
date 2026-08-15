@@ -39,22 +39,30 @@ class SshHostForm extends StatefulWidget {
 class _SshHostFormState extends State<SshHostForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  late final TextEditingController _name =
-      TextEditingController(text: widget.initial.name);
-  late final TextEditingController _host =
-      TextEditingController(text: widget.initial.host);
-  late final TextEditingController _port =
-      TextEditingController(text: widget.initial.port.toString());
-  late final TextEditingController _user =
-      TextEditingController(text: widget.initial.user);
-  late final TextEditingController _password =
-      TextEditingController(text: widget.initial.password);
-  late final TextEditingController _key =
-      TextEditingController(text: widget.initial.key);
-  late final TextEditingController _passphrase =
-      TextEditingController(text: widget.initial.passphrase);
-  late final TextEditingController _remark =
-      TextEditingController(text: widget.initial.remark);
+  late final TextEditingController _name = TextEditingController(
+    text: widget.initial.name,
+  );
+  late final TextEditingController _host = TextEditingController(
+    text: widget.initial.host,
+  );
+  late final TextEditingController _port = TextEditingController(
+    text: widget.initial.port.toString(),
+  );
+  late final TextEditingController _user = TextEditingController(
+    text: widget.initial.user,
+  );
+  late final TextEditingController _password = TextEditingController(
+    text: widget.initial.password,
+  );
+  late final TextEditingController _key = TextEditingController(
+    text: widget.initial.key,
+  );
+  late final TextEditingController _passphrase = TextEditingController(
+    text: widget.initial.passphrase,
+  );
+  late final TextEditingController _remark = TextEditingController(
+    text: widget.initial.remark,
+  );
 
   late SshAuthMethod _authMethod = widget.initial.authMethod;
   bool _obscurePassword = true;
@@ -181,8 +189,7 @@ class _SshHostFormState extends State<SshHostForm> {
                     // 常见误填：把「地址:端口」整串填进地址框。
                     // IPv6 字面量含多个冒号，只拦截「一个冒号 + 纯数字」的情况。
                     final parts = text.split(':');
-                    if (parts.length == 2 &&
-                        int.tryParse(parts.last) != null) {
+                    if (parts.length == 2 && int.tryParse(parts.last) != null) {
                       return '端口请填到右侧输入框';
                     }
                     // 其余情况交给通用校验：裸主机名或 IP（IPv4 / IPv6 均可），
@@ -226,10 +233,12 @@ class _SshHostFormState extends State<SshHostForm> {
               border: OutlineInputBorder(),
             ),
             items: SshAuthMethod.values
-                .map((method) => DropdownMenuItem<SshAuthMethod>(
-                      value: method,
-                      child: Text(method.label),
-                    ))
+                .map(
+                  (method) => DropdownMenuItem<SshAuthMethod>(
+                    value: method,
+                    child: Text(method.label),
+                  ),
+                )
                 .toList(),
             onChanged: (value) {
               if (value == null) return;
@@ -267,15 +276,16 @@ class _SshHostFormState extends State<SshHostForm> {
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   tooltip: _obscurePassword ? '显示密码' : '隐藏密码',
-                  icon: Icon(_obscurePassword
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined),
+                  icon: Icon(
+                    _obscurePassword
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                  ),
                   onPressed: () =>
                       setState(() => _obscurePassword = !_obscurePassword),
                 ),
               ),
-              validator: (value) =>
-                  (value ?? '').isEmpty ? '密码认证必须填写密码' : null,
+              validator: (value) => (value ?? '').isEmpty ? '密码认证必须填写密码' : null,
             )
           else ...[
             TextFormField(
@@ -307,9 +317,11 @@ class _SshHostFormState extends State<SshHostForm> {
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   tooltip: _obscurePassphrase ? '显示密码' : '隐藏密码',
-                  icon: Icon(_obscurePassphrase
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined),
+                  icon: Icon(
+                    _obscurePassphrase
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                  ),
                   onPressed: () =>
                       setState(() => _obscurePassphrase = !_obscurePassphrase),
                 ),
@@ -331,8 +343,8 @@ class _SshHostFormState extends State<SshHostForm> {
           Text(
             '保存时面板会先尝试建立 SSH 连接，连接失败则不会保存。',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 20),
           FilledButton(

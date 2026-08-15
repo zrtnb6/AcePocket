@@ -6,7 +6,6 @@ import '../../../core/widgets/empty_view.dart';
 import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/loading_view.dart';
 import '../../../core/widgets/section_card.dart';
-import '../models/json_utils.dart';
 import '../models/migration_status.dart';
 import '../providers/migration_providers.dart';
 import '../widgets/log_console.dart';
@@ -46,7 +45,8 @@ class MigrationResultsPage extends ConsumerWidget {
             ref.invalidate(migrationResultsProvider);
             await ref.read(migrationResultsProvider.future);
           },
-          child: snapshot.results.isEmpty &&
+          child:
+              snapshot.results.isEmpty &&
                   (snapshot.logs == null || snapshot.logs!.isEmpty)
               ? ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -102,8 +102,10 @@ class MigrationResultsPage extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('当前状态：${snapshot.step.label}',
-              style: theme.textTheme.bodyMedium),
+          Text(
+            '当前状态：${snapshot.step.label}',
+            style: theme.textTheme.bodyMedium,
+          ),
           const SizedBox(height: 6),
           Text(
             '成功 $success · 失败 $failed · 跳过 $skipped',

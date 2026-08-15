@@ -66,8 +66,10 @@ class _FirewallExportPageState extends ConsumerState<FirewallExportPage> {
         showErrorSnack(context, const ApiException('面板返回的导出文件为空'));
         return;
       }
-      final saved =
-          await saveExportFile('firewall_rules_${_timestamp()}.xlsx', bytes);
+      final saved = await saveExportFile(
+        'firewall_rules_${_timestamp()}.xlsx',
+        bytes,
+      );
       if (!mounted) return;
       _showSavedSnack(saved);
     } catch (e) {
@@ -199,8 +201,7 @@ class _FirewallExportPageState extends ConsumerState<FirewallExportPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       FilledButton.icon(
-                        onPressed:
-                            rules.isEmpty ? null : () => _copyCsv(csv),
+                        onPressed: rules.isEmpty ? null : () => _copyCsv(csv),
                         icon: const Icon(Icons.copy_all_outlined),
                         label: const Text('复制 CSV 文本'),
                       ),
@@ -213,8 +214,9 @@ class _FirewallExportPageState extends ConsumerState<FirewallExportPage> {
                             ? const SizedBox(
                                 width: 16,
                                 height: 16,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               )
                             : const Icon(Icons.save_alt),
                         label: const Text('保存为 CSV 文件'),
@@ -226,13 +228,12 @@ class _FirewallExportPageState extends ConsumerState<FirewallExportPage> {
                             ? const SizedBox(
                                 width: 16,
                                 height: 16,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               )
                             : const Icon(Icons.download_outlined),
-                        label: Text(
-                          _downloading ? '下载中…' : '下载面板 xlsx 文件',
-                        ),
+                        label: Text(_downloading ? '下载中…' : '下载面板 xlsx 文件'),
                       ),
                       const SizedBox(height: 12),
                       Text(

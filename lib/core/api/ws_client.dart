@@ -159,8 +159,8 @@ class WsLoginCredentials {
 /// [wsConnect] 的页面（终端 / SSH / 容器日志 / 计划任务日志 / 证书签发 /
 /// 面板升级 / 迁移进度…）都会自动获得两步验证与图形验证码支持，
 /// 无需各自处理。
-typedef WsLoginChallengeHandler = Future<WsLoginCredentials?> Function(
-    WsLoginChallenge challenge);
+typedef WsLoginChallengeHandler =
+    Future<WsLoginCredentials?> Function(WsLoginChallenge challenge);
 
 /// 单次登录流程内最多向用户索要几次验证码。
 ///
@@ -230,8 +230,11 @@ class WsSessionManager {
       if (pending != null) return pending;
     }
 
-    final future = _login(server, passCode, captchaCode)
-        .whenComplete(() => _pending.remove(server.id));
+    final future = _login(
+      server,
+      passCode,
+      captchaCode,
+    ).whenComplete(() => _pending.remove(server.id));
     _pending[server.id] = future;
     return future;
   }
@@ -268,8 +271,7 @@ class WsSessionManager {
     String? captchaCode,
   ) async {
     if (!server.hasCredentials) {
-      throw const WsAuthException(
-          '未配置面板用户名/密码，无法使用终端等实时功能。请在服务器设置中补充面板账号');
+      throw const WsAuthException('未配置面板用户名/密码，无法使用终端等实时功能。请在服务器设置中补充面板账号');
     }
 
     final client = createPanelHttpClient(server);
@@ -279,8 +281,9 @@ class WsSessionManager {
       // 步骤 a：访问入口路径，获取会话 Cookie 与 verify_entrance 标记。
       // entrance.go 情况二：路径等于入口（或未设置入口）且不带 Authorization 时
       // 标记 verify_entrance；之后本会话可直接访问 /api/*（情况五放行）。
-      final entrancePath =
-          server.entrancePath.isEmpty ? '/' : server.entrancePath;
+      final entrancePath = server.entrancePath.isEmpty
+          ? '/'
+          : server.entrancePath;
       final entranceRes = await _fetch(
         client,
         'GET',
@@ -299,12 +302,13 @@ class WsSessionManager {
       //   **本会话** login_fail_count >= 3 时才 required（service/user.go）。
       var pass = passCode ?? '';
       var captcha = captchaCode ?? '';
-      var needPassCode = pass.isNotEmpty ||
+      var needPassCode =
+          pass.isNotEmpty ||
           await _isTwoFa(client, base, cookies, server.username);
       var captchaState = await _fetchCaptcha(client, base, cookies);
       String? challengeMessage;
 
-      for (var attempt = 0;; attempt++) {
+      for (var attempt = 0; ; attempt++) {
         if ((needPassCode && pass.isEmpty) ||
             (captchaState.required && captcha.isEmpty)) {
           final handler = challengeHandler;
@@ -316,14 +320,16 @@ class WsSessionManager {
                       : '面板登录需要图形验证码，请稍后在网页端登录一次以解除限制'),
             );
           }
-          final credentials = await handler(WsLoginChallenge(
-            server: server,
-            needPassCode: needPassCode,
-            needCaptcha: captchaState.required,
-            captchaImageBase64: captchaState.image,
-            message: challengeMessage,
-            attempt: attempt,
-          ));
+          final credentials = await handler(
+            WsLoginChallenge(
+              server: server,
+              needPassCode: needPassCode,
+              needCaptcha: captchaState.required,
+              captchaImageBase64: captchaState.image,
+              message: challengeMessage,
+              attempt: attempt,
+            ),
+          );
           if (credentials == null) {
             throw const WsAuthException('已取消面板登录验证');
           }
@@ -343,10 +349,14 @@ class WsSessionManager {
           Uri.parse('$base/api/user/login'),
           cookies: cookies,
           jsonBody: {
-            'username':
-                _rsaOaepSha512Encrypt(publicKey, utf8.encode(server.username)),
-            'password':
-                _rsaOaepSha512Encrypt(publicKey, utf8.encode(server.password)),
+            'username': _rsaOaepSha512Encrypt(
+              publicKey,
+              utf8.encode(server.username),
+            ),
+            'password': _rsaOaepSha512Encrypt(
+              publicKey,
+              utf8.encode(server.password),
+            ),
             'safe_login': false,
             'pass_code': pass,
             'captcha_code': captcha,
@@ -382,8 +392,7 @@ class WsSessionManager {
       //（toString() 即可读文案，页面通用错误展示可直接使用）。
       final certError = takeCertificateRejection(server, e);
       if (certError != null) throw certError;
-      throw const WsAuthException(
-          '服务器证书校验失败，可在服务器配置中开启「允许自签名证书」');
+      throw const WsAuthException('服务器证书校验失败，可在服务器配置中开启「允许自签名证书」');
     } on SocketException {
       throw const WsAuthException('无法连接服务器，请检查网络与服务器地址');
     } on FormatException {
@@ -405,8 +414,9 @@ class WsSessionManager {
       final res = await _fetch(
         client,
         'GET',
-        Uri.parse('$base/api/user/is_2fa')
-            .replace(queryParameters: {'username': username}),
+        Uri.parse(
+          '$base/api/user/is_2fa',
+        ).replace(queryParameters: {'username': username}),
         cookies: cookies,
       );
       _mergeCookies(cookies, res.setCookies);
@@ -462,11 +472,13 @@ class WsSessionManager {
     _mergeCookies(cookies, keyRes.setCookies);
     if (keyRes.statusCode < 200 || keyRes.statusCode >= 300) {
       throw WsAuthException(
-          '获取登录公钥失败：${_extractMsg(keyRes) ?? 'HTTP ${keyRes.statusCode}'}');
+        '获取登录公钥失败：${_extractMsg(keyRes) ?? 'HTTP ${keyRes.statusCode}'}',
+      );
     }
     final keyBody = jsonDecode(keyRes.body);
-    final pem =
-        keyBody is Map<String, dynamic> ? keyBody['data'] as String? : null;
+    final pem = keyBody is Map<String, dynamic>
+        ? keyBody['data'] as String?
+        : null;
     if (pem == null || pem.isEmpty) {
       throw const WsAuthException('获取登录公钥失败：响应格式异常');
     }
@@ -527,8 +539,11 @@ class WsSessionManager {
     }
     if (jsonBody != null) {
       final bytes = utf8.encode(jsonEncode(jsonBody));
-      request.headers.contentType =
-          ContentType('application', 'json', charset: 'utf-8');
+      request.headers.contentType = ContentType(
+        'application',
+        'json',
+        charset: 'utf-8',
+      );
       request.headers.contentLength = bytes.length;
       request.add(bytes);
     }
@@ -637,8 +652,9 @@ class _DerReader {
     final tag = _readByte();
     if (tag != expectedTag) {
       throw FormatException(
-          'DER: expected tag 0x${expectedTag.toRadixString(16)}, '
-          'got 0x${tag.toRadixString(16)}');
+        'DER: expected tag 0x${expectedTag.toRadixString(16)}, '
+        'got 0x${tag.toRadixString(16)}',
+      );
     }
     final length = _readLength();
     if (_pos + length > _bytes.length) {
@@ -694,8 +710,9 @@ String _rsaOaepSha512Encrypt(_RsaPublicKey key, List<int> message) {
     ..setRange(hLen + psLen + 1, k - hLen - 1, message);
 
   final random = Random.secure();
-  final seed =
-      Uint8List.fromList(List<int>.generate(hLen, (_) => random.nextInt(256)));
+  final seed = Uint8List.fromList(
+    List<int>.generate(hLen, (_) => random.nextInt(256)),
+  );
 
   final dbMask = _mgf1Sha512(seed, k - hLen - 1);
   final maskedDb = Uint8List(db.length);

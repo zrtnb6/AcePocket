@@ -58,9 +58,11 @@ class _PermissionDialogState extends State<_PermissionDialog> {
     _bits = mode.split('').map((e) => int.tryParse(e) ?? 0).toList();
     _modeController = TextEditingController(text: mode);
     _ownerController = TextEditingController(
-        text: widget.initialOwner.isEmpty ? 'www' : widget.initialOwner);
+      text: widget.initialOwner.isEmpty ? 'www' : widget.initialOwner,
+    );
     _groupController = TextEditingController(
-        text: widget.initialGroup.isEmpty ? 'www' : widget.initialGroup);
+      text: widget.initialGroup.isEmpty ? 'www' : widget.initialGroup,
+    );
   }
 
   @override
@@ -127,8 +129,7 @@ class _PermissionDialogState extends State<_PermissionDialog> {
           SizedBox(width: 48, child: Text(label)),
           _bitBox('读', value & 4 != 0, (v) => _onCheckboxChanged(index, 4, v)),
           _bitBox('写', value & 2 != 0, (v) => _onCheckboxChanged(index, 2, v)),
-          _bitBox(
-              '执行', value & 1 != 0, (v) => _onCheckboxChanged(index, 1, v)),
+          _bitBox('执行', value & 1 != 0, (v) => _onCheckboxChanged(index, 1, v)),
         ],
       ),
     );
@@ -147,8 +148,7 @@ class _PermissionDialogState extends State<_PermissionDialog> {
               visualDensity: VisualDensity.compact,
               onChanged: (v) => onChanged(v ?? false),
             ),
-            Flexible(
-                child: Text(label, overflow: TextOverflow.ellipsis)),
+            Flexible(child: Text(label, overflow: TextOverflow.ellipsis)),
           ],
         ),
       ),
@@ -211,8 +211,9 @@ class _PermissionDialogState extends State<_PermissionDialog> {
               const SizedBox(height: 12),
               Text(
                 _error!,
-                style: theme.textTheme.bodySmall
-                    ?.copyWith(color: theme.colorScheme.error),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
               ),
             ],
           ],

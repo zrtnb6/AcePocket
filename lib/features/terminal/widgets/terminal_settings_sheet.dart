@@ -105,7 +105,8 @@ class TerminalSettingsSheet extends ConsumerWidget {
                     min: TerminalSettings.minFontSize,
                     max: TerminalSettings.maxFontSize,
                     divisions:
-                        (TerminalSettings.maxFontSize - TerminalSettings.minFontSize)
+                        (TerminalSettings.maxFontSize -
+                                TerminalSettings.minFontSize)
                             .round(),
                     label: settings.fontSize.toStringAsFixed(0),
                     semanticFormatterCallback: (value) =>
@@ -182,10 +183,11 @@ class TerminalSettingsSheet extends ConsumerWidget {
               min: TerminalSettings.minScrollback.toDouble(),
               max: TerminalSettings.maxScrollback.toDouble(),
               // 每档 500 行；由常量算出，改动上下限时不用再手改档数。
-              divisions: ((TerminalSettings.maxScrollback -
-                          TerminalSettings.minScrollback) /
-                      _scrollbackStep)
-                  .round(),
+              divisions:
+                  ((TerminalSettings.maxScrollback -
+                              TerminalSettings.minScrollback) /
+                          _scrollbackStep)
+                      .round(),
               label: '${settings.scrollback}',
               semanticFormatterCallback: (value) => '回滚 ${value.round()} 行',
               onChanged: (value) => notifier.setScrollback(value.round()),

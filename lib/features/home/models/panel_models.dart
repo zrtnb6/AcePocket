@@ -40,9 +40,8 @@ class PanelInfo {
     return PanelInfo(
       name: json['name'] as String? ?? 'AcePanel',
       locale: json['locale'] as String? ?? '',
-      hiddenMenu: (json['hidden_menu'] as List?)
-              ?.map((e) => e.toString())
-              .toList() ??
+      hiddenMenu:
+          (json['hidden_menu'] as List?)?.map((e) => e.toString()).toList() ??
           const [],
       customLogo: json['custom_logo'] as String? ?? '',
     );
@@ -117,12 +116,14 @@ class SystemInfo {
       osEol: json['os_eol'] as bool? ?? false,
       bootTime: (json['boot_time'] as num?)?.toInt() ?? 0,
       uptime: (json['uptime'] as num?)?.toInt() ?? 0,
-      nets: (json['nets'] as List?)
+      nets:
+          (json['nets'] as List?)
               ?.whereType<Map<String, dynamic>>()
               .map(LabelValue.fromJson)
               .toList() ??
           const [],
-      disks: (json['disks'] as List?)
+      disks:
+          (json['disks'] as List?)
               ?.whereType<Map<String, dynamic>>()
               .map(LabelValue.fromJson)
               .toList() ??

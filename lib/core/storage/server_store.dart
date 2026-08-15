@@ -83,7 +83,8 @@ class ServerStore {
 /// 增删改统一走本 Notifier（会同步持久化，并维护 [activeServerProvider]）。
 final serverListProvider =
     AsyncNotifierProvider<ServerListNotifier, List<ServerConfig>>(
-        ServerListNotifier.new);
+      ServerListNotifier.new,
+    );
 
 class ServerListNotifier extends AsyncNotifier<List<ServerConfig>> {
   @override
@@ -106,8 +107,7 @@ class ServerListNotifier extends AsyncNotifier<List<ServerConfig>> {
 
   /// 按 id 更新服务器；若为当前选中的服务器则同步刷新 activeServerProvider。
   Future<void> updateServer(ServerConfig server) async {
-    final list =
-        _current.map((s) => s.id == server.id ? server : s).toList();
+    final list = _current.map((s) => s.id == server.id ? server : s).toList();
     await ServerStore.instance.saveServers(list);
     state = AsyncData(list);
     if (ref.read(activeServerProvider)?.id == server.id) {
@@ -133,7 +133,8 @@ class ServerListNotifier extends AsyncNotifier<List<ServerConfig>> {
 /// 当前选中的服务器（未配置任何服务器时为 null）。
 final activeServerProvider =
     NotifierProvider<ActiveServerNotifier, ServerConfig?>(
-        ActiveServerNotifier.new);
+      ActiveServerNotifier.new,
+    );
 
 class ActiveServerNotifier extends Notifier<ServerConfig?> {
   @override
@@ -149,7 +150,8 @@ class ActiveServerNotifier extends Notifier<ServerConfig?> {
 
   /// 选中指定 id 的服务器并持久化；id 不存在时不做任何事。
   Future<void> select(String id) async {
-    final list = ref.read(serverListProvider).valueOrNull ??
+    final list =
+        ref.read(serverListProvider).valueOrNull ??
         ServerStore.instance.servers;
     for (final s in list) {
       if (s.id == id) {

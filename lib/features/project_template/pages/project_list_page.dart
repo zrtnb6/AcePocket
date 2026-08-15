@@ -54,8 +54,7 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
   }
 
   /// 加载下一页；失败会记录到 `state.loadMoreError`，由列表底部展示并可重试。
-  Future<void> _loadMore() =>
-      ref.read(projectListProvider.notifier).loadMore();
+  Future<void> _loadMore() => ref.read(projectListProvider.notifier).loadMore();
 
   Future<void> _refresh() => ref.read(projectListProvider.notifier).refresh();
 
@@ -137,7 +136,9 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
       } else {
         await repo.enable(project.name);
       }
-      ref.read(projectListProvider.notifier).replaceWhere(
+      ref
+          .read(projectListProvider.notifier)
+          .replaceWhere(
             (item) => item.id == project.id,
             (item) => item.copyWith(enabled: !project.enabled),
           );
@@ -151,7 +152,8 @@ class _ProjectListPageState extends ConsumerState<ProjectListPage> {
     final ok = await showConfirmDialog(
       context,
       title: '删除项目',
-      content: '确定要删除项目「${project.name}」吗？\n'
+      content:
+          '确定要删除项目「${project.name}」吗？\n'
           '面板会同时删除对应的 systemd 服务配置，项目目录中的文件不会被移除。',
       confirmText: '删除',
       danger: true,
@@ -290,10 +292,7 @@ class _TypeFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final options = <(String, String)>[
-      ('all', '全部'),
-      ...kProjectTypeOptions,
-    ];
+    final options = <(String, String)>[('all', '全部'), ...kProjectTypeOptions];
     return SizedBox(
       height: 52,
       child: ListView.separated(

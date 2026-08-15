@@ -66,7 +66,9 @@ class _NetworkCreateSheetState extends ConsumerState<_NetworkCreateSheet> {
       context,
       pending: '正在创建网络…',
       success: '网络已创建',
-      action: () => ref.read(containerRepoProvider).createNetwork(
+      action: () => ref
+          .read(containerRepoProvider)
+          .createNetwork(
             name: _nameController.text.trim(),
             driver: _driver,
             ipv4: ContainerNetworkFamilyConfig(
@@ -176,8 +178,8 @@ class _NetworkCreateSheetState extends ConsumerState<_NetworkCreateSheet> {
                           labelText: '子网',
                           hintText: '如 172.20.0.0/16',
                         ),
-                        validator: (value) => _ipv4Enabled &&
-                                (value ?? '').trim().isEmpty
+                        validator: (value) =>
+                            _ipv4Enabled && (value ?? '').trim().isEmpty
                             ? '请输入 IPv4 子网'
                             : null,
                       ),
@@ -212,8 +214,8 @@ class _NetworkCreateSheetState extends ConsumerState<_NetworkCreateSheet> {
                           labelText: '子网',
                           hintText: '如 fd00::/64',
                         ),
-                        validator: (value) => _ipv6Enabled &&
-                                (value ?? '').trim().isEmpty
+                        validator: (value) =>
+                            _ipv6Enabled && (value ?? '').trim().isEmpty
                             ? '请输入 IPv6 子网'
                             : null,
                       ),

@@ -52,8 +52,11 @@ class CronExpressionField extends StatelessWidget {
           builder: (context, value, _) {
             return Row(
               children: [
-                Icon(Icons.schedule,
-                    size: 16, color: theme.colorScheme.primary),
+                Icon(
+                  Icons.schedule,
+                  size: 16,
+                  color: theme.colorScheme.primary,
+                ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
@@ -119,9 +122,7 @@ class _CronBuilderSheetState extends State<_CronBuilderSheet> {
     final fields = widget.expression.trim().split(RegExp(r'\s+'));
     _controllers = List.generate(
       5,
-      (i) => TextEditingController(
-        text: fields.length == 5 ? fields[i] : '*',
-      ),
+      (i) => TextEditingController(text: fields.length == 5 ? fields[i] : '*'),
     );
   }
 
@@ -133,9 +134,9 @@ class _CronBuilderSheetState extends State<_CronBuilderSheet> {
     super.dispose();
   }
 
-  String get _expression =>
-      _controllers.map((c) => c.text.trim().isEmpty ? '*' : c.text.trim())
-          .join(' ');
+  String get _expression => _controllers
+      .map((c) => c.text.trim().isEmpty ? '*' : c.text.trim())
+      .join(' ');
 
   @override
   Widget build(BuildContext context) {

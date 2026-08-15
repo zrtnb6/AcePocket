@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/utils/format.dart';
 import '../../../core/widgets/a11y.dart';
 import '../../../core/widgets/confirm_dialog.dart';
 import '../models/container_volume.dart';
@@ -30,7 +31,8 @@ class VolumeListPage extends ConsumerWidget {
     final ok = await showConfirmDialog(
       context,
       title: '删除存储卷',
-      content: '确定要删除「${volume.name}」吗？\n卷内数据将被永久删除，此操作不可恢复。'
+      content:
+          '确定要删除「${volume.name}」吗？\n卷内数据将被永久删除，此操作不可恢复。'
           '${volume.inUse ? '\n该卷正被 ${volume.refCount} 个容器使用，删除可能失败。' : ''}',
       confirmText: '删除',
       danger: true,
@@ -107,7 +109,7 @@ class VolumeListPage extends ConsumerWidget {
         onLoadMore: () =>
             ref.read(containerVolumesProvider.notifier).loadMore(),
         onRetry: () => ref.invalidate(containerVolumesProvider),
-        itemBuilder: (context, volume) => _VolumeTile(
+        itemBuilder: (context, volume, _) => _VolumeTile(
           volume: volume,
           onDelete: () => _remove(context, ref, volume),
         ),
@@ -213,7 +215,11 @@ class _VolumeTile extends StatelessWidget {
             const SizedBox(height: 6),
             Row(
               children: [
-                Icon(Icons.schedule, size: 13, color: theme.colorScheme.outline),
+                Icon(
+                  Icons.schedule,
+                  size: 13,
+                  color: theme.colorScheme.outline,
+                ),
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(

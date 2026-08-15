@@ -105,11 +105,15 @@ class _WebsiteListPageState extends ConsumerState<WebsiteListPage> {
   }
 
   Future<void> _delete(Website website) async {
-    final options =
-        await showDeleteWebsiteDialog(context, websiteName: website.name);
+    final options = await showDeleteWebsiteDialog(
+      context,
+      websiteName: website.name,
+    );
     if (options == null) return;
     await _runBusy(website.id, () async {
-      await ref.read(websiteRepoProvider).delete(
+      await ref
+          .read(websiteRepoProvider)
+          .delete(
             website.id,
             deletePath: options.deletePath,
             deleteDb: options.deleteDb,
@@ -203,9 +207,8 @@ class _WebsiteListPageState extends ConsumerState<WebsiteListPage> {
                         selected: type == filter.value,
                         onSelected: (_) {
                           if (type == filter.value) return;
-                          ref
-                              .read(websiteTypeFilterProvider.notifier)
-                              .state = filter.value;
+                          ref.read(websiteTypeFilterProvider.notifier).state =
+                              filter.value;
                         },
                       ),
                     ),
@@ -232,9 +235,7 @@ class _WebsiteListPageState extends ConsumerState<WebsiteListPage> {
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height * 0.2),
                   EmptyView(
-                    message: type == 'all'
-                        ? '还没有创建任何网站'
-                        : '当前类型下没有网站',
+                    message: type == 'all' ? '还没有创建任何网站' : '当前类型下没有网站',
                     icon: Icons.language_outlined,
                     action: FilledButton.icon(
                       onPressed: _openCreate,
@@ -311,8 +312,9 @@ class _ListFooter extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: theme.colorScheme.error),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.error,
+              ),
             ),
             const SizedBox(height: 8),
             TextButton.icon(
@@ -341,8 +343,9 @@ class _ListFooter extends StatelessWidget {
       child: Center(
         child: Text(
           hasMore ? '上拉加载更多' : '共 $count 个网站',
-          style: theme.textTheme.labelSmall
-              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
         ),
       ),
     );

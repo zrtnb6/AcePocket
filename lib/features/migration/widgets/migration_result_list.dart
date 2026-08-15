@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../core/utils/format.dart';
 import '../../../core/widgets/section_card.dart';
-import '../models/json_utils.dart';
 import '../models/migration_status.dart';
 
 /// 迁移结果列表（进度页与结果页共用）。
@@ -56,22 +55,19 @@ class MigrationResultTile extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final (IconData icon, Color color) = switch (result.status) {
       MigrationItemStatus.pending => (
-          Icons.schedule,
-          colorScheme.onSurfaceVariant
-        ),
-      MigrationItemStatus.running => (
-          Icons.autorenew,
-          colorScheme.primary,
-        ),
+        Icons.schedule,
+        colorScheme.onSurfaceVariant,
+      ),
+      MigrationItemStatus.running => (Icons.autorenew, colorScheme.primary),
       MigrationItemStatus.success => (
-          Icons.check_circle_outline,
-          colorScheme.primary,
-        ),
+        Icons.check_circle_outline,
+        colorScheme.primary,
+      ),
       MigrationItemStatus.failed => (Icons.error_outline, colorScheme.error),
       MigrationItemStatus.skipped => (
-          Icons.remove_circle_outline,
-          colorScheme.outline,
-        ),
+        Icons.remove_circle_outline,
+        colorScheme.outline,
+      ),
     };
 
     return Row(
@@ -95,8 +91,10 @@ class MigrationResultTile extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(6),

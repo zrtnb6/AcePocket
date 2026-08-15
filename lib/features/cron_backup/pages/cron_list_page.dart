@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -60,8 +62,7 @@ class _CronListPageState extends ConsumerState<CronListPage> {
               ),
               data: (data) => PagedList<Cron>(
                 state: data,
-                onRefresh: () =>
-                    ref.read(cronListProvider.notifier).refresh(),
+                onRefresh: () => ref.read(cronListProvider.notifier).refresh(),
                 onLoadMore: _loadMore,
                 emptyView: EmptyView(
                   icon: Icons.timer_outlined,
@@ -126,17 +127,20 @@ class _CronListPageState extends ConsumerState<CronListPage> {
     final ok = await showConfirmDialog(
       context,
       title: '立即执行',
-      content: '将在服务器上立即运行「${cron.name}」的任务脚本，输出会实时显示。'
+      content:
+          '将在服务器上立即运行「${cron.name}」的任务脚本，输出会实时显示。'
           '任务本身的执行周期不受影响。',
       confirmText: '立即执行',
     );
     if (!ok || !mounted) return;
     if (!context.mounted) return;
-    context.push(
-      Uri(
-        path: '/crons/run',
-        queryParameters: {'shell': cron.shell, 'name': cron.name},
-      ).toString(),
+    unawaited(
+      context.push(
+        Uri(
+          path: '/crons/run',
+          queryParameters: {'shell': cron.shell, 'name': cron.name},
+        ).toString(),
+      ),
     );
   }
 

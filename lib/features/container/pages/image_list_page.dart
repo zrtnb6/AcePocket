@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/utils/format.dart';
 import '../../../core/widgets/a11y.dart';
 import '../../../core/widgets/confirm_dialog.dart';
 import '../models/container_image.dart';
@@ -31,7 +32,8 @@ class ImageListPage extends ConsumerWidget {
     final ok = await showConfirmDialog(
       context,
       title: '删除镜像',
-      content: '确定要删除镜像「${image.displayName}」吗？此操作不可恢复。'
+      content:
+          '确定要删除镜像「${image.displayName}」吗？此操作不可恢复。'
           '${image.inUse ? '\n该镜像仍被 ${image.containers} 个容器使用，删除可能失败。' : ''}',
       confirmText: '删除',
       danger: true,
@@ -107,7 +109,7 @@ class ImageListPage extends ConsumerWidget {
         onRefresh: () => ref.read(containerImagesProvider.notifier).refresh(),
         onLoadMore: () => ref.read(containerImagesProvider.notifier).loadMore(),
         onRetry: () => ref.invalidate(containerImagesProvider),
-        itemBuilder: (context, image) => _ImageTile(
+        itemBuilder: (context, image, _) => _ImageTile(
           image: image,
           onDelete: () => _remove(context, ref, image),
         ),
@@ -167,8 +169,8 @@ class _ImageTile extends StatelessWidget {
                             label: image.usageUnknown
                                 ? '引用数未知'
                                 : image.inUse
-                                    ? '${image.containers} 个容器使用中'
-                                    : '未使用',
+                                ? '${image.containers} 个容器使用中'
+                                : '未使用',
                             tone: image.inUse
                                 ? BadgeTone.success
                                 : BadgeTone.neutral,
@@ -212,7 +214,11 @@ class _ImageTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Icon(Icons.schedule, size: 13, color: theme.colorScheme.outline),
+                Icon(
+                  Icons.schedule,
+                  size: 13,
+                  color: theme.colorScheme.outline,
+                ),
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
